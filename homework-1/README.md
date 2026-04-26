@@ -268,6 +268,6 @@ Sample transactions are loaded from `transactions.json` at startup:
 
 <div align="center">
 
-
+Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
 
 </div>
