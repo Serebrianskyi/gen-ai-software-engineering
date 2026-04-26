@@ -40,13 +40,21 @@ Started BankingApplication in X.XXX seconds
 Tomcat started on port 8080
 ```
 
-### Verify Installation
+### Verify Installation & Access Swagger UI
 
-Access the API after startup:
+Once running, access the interactive API documentation:
 
-- **Interactive Docs**: http://localhost:8080/swagger-ui.html
-- **OpenAPI Spec**: http://localhost:8080/api-docs
-- **Health Check**: http://localhost:8080/actuator/health
+#### 🎨 Swagger UI (Interactive API Explorer)
+- **Main**: http://localhost:8080/swagger-ui.html
+
+#### 📋 API Specification
+- **OpenAPI JSON**: http://localhost:8080/api-docs
+- **OpenAPI YAML**: http://localhost:8080/api-docs.yaml
+- **Source**: [`openapi-spec/openapi.yaml`](../openapi-spec/openapi.yaml)
+
+#### ✅ Health Check
+- **Endpoint**: http://localhost:8080/actuator/health
+- **Expected**: `{"status":"UP"}`
 
 ### Build & Test
 

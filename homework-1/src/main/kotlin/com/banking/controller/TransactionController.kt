@@ -1,26 +1,31 @@
 package com.banking.controller
 
-import com.banking.model.*
+import com.banking.model.Transaction
 import com.banking.model.generated.CreateTransactionRequest
 import com.banking.service.TransactionService
 import com.banking.service.ValidationException
-import com.banking.validator.ValidationErrorDetail
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/v1")
 @Tag(name = "Transactions", description = "Banking transaction management API")
 class TransactionController(
-    private val transactionService: TransactionService
+    private val transactionService: TransactionService,
 ) {
 
     @PostMapping("/transactions")
@@ -37,7 +42,7 @@ class TransactionController(
                 onFailure = { error ->
                     ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(error as? ValidationException)
-                }
+                },
             )
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -52,7 +57,7 @@ class TransactionController(
         @RequestParam(required = false) accountId: String?,
         @RequestParam(required = false) type: String?,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) from: LocalDate?,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) to: LocalDate?
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) to: LocalDate?,
     ): ResponseEntity<List<Transaction>> {
         val transactions = transactionService.getTransactions(accountId, type, from, to)
         return ResponseEntity.ok(transactions)
@@ -108,7 +113,7 @@ class TransactionController(
     fun calculateInterest(
         @PathVariable accountId: String,
         @RequestParam rate: Double,
-        @RequestParam days: Int
+        @RequestParam days: Int,
     ): ResponseEntity<Any> {
         if (rate < 0 || days < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -129,7 +134,7 @@ class TransactionController(
     fun handleValidationException(ex: ValidationException): Map<String, Any> {
         return mapOf(
             "error" to "Validation failed",
-            "details" to ex.errors
+            "details" to ex.errors,
         )
     }
 
@@ -139,7 +144,7 @@ class TransactionController(
         return mapOf(
             "error" to "internal_error",
             "message" to (ex.message ?: "Unknown error"),
-            "timestamp" to System.currentTimeMillis()
+            "timestamp" to System.currentTimeMillis(),
         )
     }
 }

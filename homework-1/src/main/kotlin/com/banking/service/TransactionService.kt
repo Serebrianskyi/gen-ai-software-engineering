@@ -1,6 +1,11 @@
 package com.banking.service
 
-import com.banking.model.*
+import com.banking.model.AccountBalance
+import com.banking.model.AccountSummary
+import com.banking.model.InterestCalculation
+import com.banking.model.Transaction
+import com.banking.model.TransactionStatus
+import com.banking.model.TransactionType
 import com.banking.model.generated.CreateTransactionRequest
 import com.banking.validator.TransactionValidator
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -9,13 +14,12 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
-import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.util.UUID
 
 @Service
 class TransactionService(
-    private val validator: TransactionValidator
+    private val validator: TransactionValidator,
 ) {
 
     private val transactions: MutableList<Transaction> = mutableListOf()
@@ -31,7 +35,7 @@ class TransactionService(
             File("transactions.json"),
             File("../transactions.json"),
             File(System.getProperty("user.dir"), "transactions.json"),
-            File(System.getProperty("user.dir"), "../transactions.json")
+            File(System.getProperty("user.dir"), "../transactions.json"),
         )
 
         val file = paths.firstOrNull { it.exists() }
@@ -49,7 +53,7 @@ class TransactionService(
                             type = TransactionType.valueOf((map["type"] as String).uppercase()),
                             timestamp = Instant.parse(map["timestamp"] as String),
                             status = TransactionStatus.valueOf((map["status"] as String).uppercase()),
-                            description = map["description"] as? String
+                            description = map["description"] as? String,
                         )
                         transactions.add(transaction)
                     } catch (e: Exception) {
@@ -70,10 +74,10 @@ class TransactionService(
 
         val typeEnum =
             when (request.type) {
-            CreateTransactionRequest.Type.DEPOSIT -> TransactionType.DEPOSIT
-            CreateTransactionRequest.Type.WITHDRAWAL -> TransactionType.WITHDRAWAL
-            CreateTransactionRequest.Type.TRANSFER -> TransactionType.TRANSFER
-        }
+                CreateTransactionRequest.Type.DEPOSIT -> TransactionType.DEPOSIT
+                CreateTransactionRequest.Type.WITHDRAWAL -> TransactionType.WITHDRAWAL
+                CreateTransactionRequest.Type.TRANSFER -> TransactionType.TRANSFER
+            }
 
         val transaction = Transaction(
             id = UUID.randomUUID().toString(),
@@ -84,7 +88,7 @@ class TransactionService(
             type = typeEnum,
             timestamp = Instant.now(),
             status = TransactionStatus.COMPLETED,
-            description = request.description
+            description = request.description,
         )
 
         transactions.add(transaction)
@@ -95,7 +99,7 @@ class TransactionService(
         accountId: String? = null,
         type: String? = null,
         from: LocalDate? = null,
-        to: LocalDate? = null
+        to: LocalDate? = null,
     ): List<Transaction> {
         return transactions.filter { transaction ->
             var matches = true
@@ -143,7 +147,7 @@ class TransactionService(
                 accountId = accountId,
                 balance = balance,
                 currency = "USD",
-                lastUpdated = Instant.now()
+                lastUpdated = Instant.now(),
             )
         } else {
             null
@@ -176,7 +180,7 @@ class TransactionService(
             totalDeposits = totalDeposits,
             totalWithdrawals = totalWithdrawals,
             transactionCount = accountTransactions.size,
-            lastTransactionDate = lastTransaction?.timestamp
+            lastTransactionDate = lastTransaction?.timestamp,
         )
     }
 
@@ -193,7 +197,7 @@ class TransactionService(
             rate = rate,
             days = days,
             calculatedInterest = calculatedInterest,
-            futureValue = futureValue
+            futureValue = futureValue,
         )
     }
 }

@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.spring")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.diffplug.spotless")
 }
 
 group = "com.banking"
@@ -56,4 +57,21 @@ tasks.withType<Test> {
 
 springBoot {
     mainClass.set("com.banking.BankingApplicationKt")
+}
+
+// Spotless code formatting
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+}
+
+// Make build check formatting before tests
+tasks.named("check") {
+    dependsOn("spotlessCheck")
 }

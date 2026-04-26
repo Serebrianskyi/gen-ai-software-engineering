@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.springdoc.openapi-gradle-plugin") version "1.8.0"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 // API Spec Version
@@ -52,4 +53,21 @@ tasks.withType<Test> {
 
 springBoot {
     mainClass.set("com.banking.ApplicationKt")
+}
+
+// Spotless code formatting
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+    kotlinGradle {
+        target("*.gradle.kts", "**/*.gradle.kts")
+        ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+}
+
+// Make build check formatting before tests
+tasks.named("check") {
+    dependsOn("spotlessCheck")
 }

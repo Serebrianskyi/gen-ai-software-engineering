@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 data class ValidationErrorDetail(
     val field: String,
-    val message: String
+    val message: String,
 )
 
 @Component
@@ -14,7 +14,7 @@ class TransactionValidator {
     private val validCurrencies = setOf(
         "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY",
         "INR", "RUB", "ZAR", "KRW", "MXN", "SGD", "HKD", "NOK",
-        "SEK", "DKK", "NZD", "BRL", "TRY", "AED", "SAR"
+        "SEK", "DKK", "NZD", "BRL", "TRY", "AED", "SAR",
     )
 
     fun validateCreateTransaction(request: CreateTransactionRequest): List<ValidationErrorDetail> {

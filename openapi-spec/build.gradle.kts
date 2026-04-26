@@ -45,18 +45,20 @@ openApiGenerate {
     apiPackage.set("com.banking.api")
     modelPackage.set("com.banking.model.generated")
     packageName.set("com.banking.generated")
-    configOptions.set(mapOf(
-        "useSpringBoot3" to "true",
-        "documentationProvider" to "springdoc",
-        "skipDefaultInterface" to "true",
-        "interfaceOnly" to "false",
-        "useBeanValidation" to "true",
-        "packageVersion" to "0.0.1",
-        "openApiNullable" to "false",
-        "enumPropertyNaming" to "UPPERCASE",
-        "parcelableModels" to "false",
-        "serializableModel" to "true"
-    ))
+    configOptions.set(
+        mapOf(
+            "useSpringBoot3" to "true",
+            "documentationProvider" to "springdoc",
+            "skipDefaultInterface" to "true",
+            "interfaceOnly" to "false",
+            "useBeanValidation" to "true",
+            "packageVersion" to "0.0.1",
+            "openApiNullable" to "false",
+            "enumPropertyNaming" to "UPPERCASE",
+            "parcelableModels" to "false",
+            "serializableModel" to "true",
+        ),
+    )
 }
 
 kotlin {
