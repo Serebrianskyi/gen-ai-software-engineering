@@ -40,7 +40,7 @@ dependencies {
 
 openApiGenerate {
     generatorName.set("kotlin-spring")
-    inputSpec.set("${rootProject.rootDir}/openapi.yaml")
+    inputSpec.set("$projectDir/homework-1.yaml")
     outputDir.set("$buildDir/generated/openapi")
     apiPackage.set("com.banking.api")
     modelPackage.set("com.banking.model.generated")
