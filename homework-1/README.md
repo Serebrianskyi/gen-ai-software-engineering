@@ -50,7 +50,7 @@ Once running, access the interactive API documentation:
 #### 📋 API Specification
 - **OpenAPI JSON**: http://localhost:8080/api-docs
 - **OpenAPI YAML**: http://localhost:8080/api-docs.yaml
-- **Source**: [`openapi-spec/openapi.yaml`](../openapi-spec/openapi.yaml)
+- **Source**: [`openapi-spec/homework-1.yaml`](../openapi-spec/homework-1.yaml)
 
 #### ✅ Health Check
 - **Endpoint**: http://localhost:8080/actuator/health
@@ -101,7 +101,7 @@ homework-1/
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    openapi.yaml                             │
+│              openapi-spec/homework-1.yaml                   │
 │              (API Contract - Source of Truth)               │
 └────────────────────────┬────────────────────────────────────┘
                          │ generates via
@@ -256,7 +256,7 @@ Sample transactions are loaded from `transactions.json` at startup:
 
 | File | Purpose |
 |------|---------|
-| `openapi.yaml` | API specification (root) |
+| `openapi-spec/homework-1.yaml` | API specification for HW1 |
 | `transactions.json` | Sample data (root) |
 | `BankingApplication.kt` | Spring Boot entry point |
 | `SwaggerConfig.kt` | OpenAPI/Swagger setup |

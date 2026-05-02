@@ -233,7 +233,6 @@ pkill -f "java.*banking"
 ```
 ai-workshops/
 ├── README.md                       # Main documentation (START HERE)
-├── openapi.yaml                    # API specification
 ├── transactions.json               # Sample data
 │
 ├── build.gradle.kts               # Root build config
@@ -241,6 +240,7 @@ ai-workshops/
 │
 ├── openapi-spec/                  # OpenAPI module
 │   ├── build.gradle.kts
+│   ├── homework-1.yaml            # API specification for HW1
 │   └── build/generated/           # Generated DTOs
 │
 └── homework-1/                    # Main application
@@ -269,7 +269,7 @@ ai-workshops/
 
 - [README.md](../README.md) - Complete documentation
 - [homework-1/README.md](./README.md) - Implementation details
-- [openapi.yaml](../openapi.yaml) - API specification
+- [openapi-spec/homework-1.yaml](../openapi-spec/homework-1.yaml) - API specification
 - http://localhost:8080/swagger-ui.html - Interactive API docs
 - http://localhost:8080/api-docs - OpenAPI JSON
 
