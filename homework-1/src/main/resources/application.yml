@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: banking-transactions-api
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+
+logging:
+  level:
+    root: INFO
+    com.banking: DEBUG

@@ -22,11 +22,32 @@ git clone https://github.com/YOUR_USERNAME/ai-assisted-dev-homework.git
 
 ---
 
+## 📚 API Documentation (Swagger/OpenAPI)
+
+The API specification is defined in **[openapi-spec/homework-1.yaml](./openapi-spec/homework-1.yaml)** - view it directly on GitHub or access the interactive documentation:
+
+### 🎨 Access Swagger UI (Interactive)
+When the application is running:
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **ReDoc UI**: http://localhost:8080/redoc.html
+- **OpenAPI JSON**: http://localhost:8080/api-docs
+- **OpenAPI YAML**: http://localhost:8080/api-docs.yaml
+
+### 📄 View OpenAPI Specification
+- **Repository**: [openapi-spec/homework-1.yaml](./openapi-spec/homework-1.yaml) ← View in GitHub
+- **Live Endpoint**: `http://localhost:8080/api-docs` (when running)
+- **Format**: OpenAPI 3.0.0
+
+---
+
 ## 📁 Repository Structure
 
 ```
 ai-assisted-dev-homework/
 ├── 📄 README.md                    # This file
+├── 📂 openapi-spec/                # API Specification Module
+│   └── 📄 homework-1.yaml          # OpenAPI 3.0 specification for HW1 (view in GitHub)
+│
 ├── 📂 homework-1/                  # Homework 1: Simple API with AI Assistance
 │   ├── 📄 README.md               # Your documentation for HW1
 │   ├── 📂 src/                    # Your source code

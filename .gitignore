@@ -1,58 +1,232 @@
-# Dependencies
-node_modules/
-venv/
-.venv/
-__pycache__/
-*.pyc
-target/
+# ============================================
+# Gradle & Build
+# ============================================
 build/
-dist/
+.gradle/
+*.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!gradle-app.setting
 
-# Environment files
+# ============================================
+# Kotlin/Java
+# ============================================
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.rar
+target/
+out/
+*.iml
+
+# ============================================
+# IDE - IntelliJ IDEA
+# ============================================
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+
+# IDE - Sublime
+.sublime-workspace
+.sublime-project
+
+# ============================================
+# Environment & Configuration
+# ============================================
 .env
 .env.local
 .env.*.local
 *.env
+.env*
+!.env.example
 
-# IDE and editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-.DS_Store
-Thumbs.db
-
-# Logs
+# ============================================
+# Runtime & Logs
+# ============================================
 logs/
 *.log
+*.log.*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.gradle.log
+app.log
 
-# Test coverage
+# ============================================
+# Test Coverage & Reports
+# ============================================
 coverage/
 .nyc_output/
 htmlcov/
 .coverage
 *.cover
+reports/
+test-results/
 
-# Build outputs
-*.class
-*.jar
-*.war
-*.ear
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.temp
-
-# OS generated files
+# ============================================
+# OS Generated Files
+# ============================================
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+Thumbs.db
+desktop.ini
+.AppleDouble
+
+# ============================================
+# Temporary & Cache Files
+# ============================================
+tmp/
+temp/
+cache/
+*.tmp
+*.temp
+*.bak
+*.swp
+.cache/
+
+# ============================================
+# Node.js (if used)
+# ============================================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ============================================
+# Python (if used)
+# ============================================
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ============================================
+# Spring Boot
+# ============================================
+*.jar
+*.war
+*.ear
+MANIFEST.MF
+.springBeans
+
+# ============================================
+# Database
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+# ============================================
+# Local Development
+# ============================================
+.local/
+.work/
+docker-compose.override.yml
+
+# ============================================
+# Distribution Files
+# ============================================
+dist/
+release/
+*.tar.gz
+*.zip
+
+# ============================================
+# Generated Files
+# ============================================
+generated/
+*.generated.*
+
+# ============================================
+# Secrets & Credentials
+# ============================================
+secrets/
+credentials.json
+.aws/
+.credentials
+*.pem
+*.key
+
+# ============================================
+# Build Directory Structure
+# ============================================
+homework-1/build/
+openapi-spec/build/
+
+# ============================================
+# Gradle Wrapper
+# ============================================
+gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradle/wrapper/gradle-wrapper.jar
+
+# ============================================
+# Maven (if applicable)
+# ============================================
+.m2/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+pom.xml.bak
+
+# ============================================
+# IntelliJ
+# ============================================
+*.iml
+*.iws
+*.ipr
+.idea/
+out/
+
+# ============================================
+# macOS
+# ============================================
+.AppleDouble
+.LSOverride
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# ============================================
+# Windows
+# ============================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ============================================
+# Linux
+# ============================================
+*~
+.nfs*
+
+# ============================================
+# Custom Project Files
+# ============================================
+.gradle-wrapper/
+gradle-wrapper.properties
