@@ -21,7 +21,7 @@ enum class TicketCategory {
     BUG_REPORT,
 
     @JsonProperty("other")
-    OTHER
+    OTHER,
 }
 
 enum class TicketPriority {
@@ -35,7 +35,7 @@ enum class TicketPriority {
     MEDIUM,
 
     @JsonProperty("low")
-    LOW
+    LOW,
 }
 
 enum class TicketStatus {
@@ -52,7 +52,7 @@ enum class TicketStatus {
     RESOLVED,
 
     @JsonProperty("closed")
-    CLOSED
+    CLOSED,
 }
 
 enum class TicketSource {
@@ -69,7 +69,7 @@ enum class TicketSource {
     CHAT,
 
     @JsonProperty("phone")
-    PHONE
+    PHONE,
 }
 
 enum class DeviceType {
@@ -80,7 +80,7 @@ enum class DeviceType {
     MOBILE,
 
     @JsonProperty("tablet")
-    TABLET
+    TABLET,
 }
 
 data class TicketMetadata(
@@ -91,7 +91,7 @@ data class TicketMetadata(
     val browser: String? = null,
 
     @JsonProperty("device_type")
-    val deviceType: DeviceType? = null
+    val deviceType: DeviceType? = null,
 )
 
 data class Ticket(
@@ -138,5 +138,5 @@ data class Ticket(
     val tags: List<String> = emptyList(),
 
     @JsonProperty("metadata")
-    val metadata: TicketMetadata? = null
+    val metadata: TicketMetadata? = null,
 )

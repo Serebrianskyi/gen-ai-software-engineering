@@ -8,7 +8,6 @@ import com.ai.homework.model.TicketCategory
 import com.ai.homework.model.TicketMetadata
 import com.ai.homework.model.TicketPriority
 import com.ai.homework.model.TicketSource
-import com.ai.homework.model.TicketStatus
 import com.ai.homework.service.TicketService
 import com.ai.homework.validator.TicketValidator
 import org.apache.commons.csv.CSVFormat
@@ -20,7 +19,7 @@ import java.io.InputStreamReader
 @Component
 class CsvTicketImporter(
     private val validator: TicketValidator,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
 ) : TicketImporter {
 
     companion object {
@@ -52,8 +51,8 @@ class CsvTicketImporter(
                                 ImportError(
                                     row = recordNumber,
                                     field = errorMsg.split(":")[0],
-                                    message = errorMsg
-                                )
+                                    message = errorMsg,
+                                ),
                             )
                         }
                     }
@@ -68,9 +67,9 @@ class CsvTicketImporter(
                     ImportError(
                         row = 0,
                         field = "file",
-                        message = "Failed to parse CSV: ${e.message}"
-                    )
-                )
+                        message = "Failed to parse CSV: ${e.message}",
+                    ),
+                ),
             )
         }
 
@@ -78,7 +77,7 @@ class CsvTicketImporter(
             totalRecords = totalRecords,
             successful = tickets.size,
             failed = errors.size,
-            errors = errors
+            errors = errors,
         )
     }
 
@@ -136,7 +135,7 @@ class CsvTicketImporter(
         val metadata = TicketMetadata(
             source = source,
             browser = record["browser"],
-            deviceType = deviceType
+            deviceType = deviceType,
         )
 
         val ticket = Ticket(
@@ -148,7 +147,7 @@ class CsvTicketImporter(
             category = category,
             priority = priority,
             metadata = metadata,
-            tags = record["tags"]?.split(",")?.map { it.trim() } ?: emptyList()
+            tags = record["tags"]?.split(",")?.map { it.trim() } ?: emptyList(),
         )
 
         return ImportedTicket(ticket, emptyList())

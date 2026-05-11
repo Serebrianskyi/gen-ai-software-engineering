@@ -23,20 +23,19 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/tickets")
 class TicketController(
     private val ticketService: TicketService,
     private val classificationService: ClassificationService,
-    private val validator: TicketValidator
+    private val validator: TicketValidator,
 ) {
 
     @PostMapping
     fun createTicket(
         @RequestBody request: TicketCreateRequest,
-        @RequestParam(name = "auto_classify", defaultValue = "false") autoClassify: Boolean
+        @RequestParam(name = "auto_classify", defaultValue = "false") autoClassify: Boolean,
     ): ResponseEntity<Any> {
         val validationErrors = validator.validate(request)
         if (validationErrors.isNotEmpty()) {
@@ -44,9 +43,9 @@ class TicketController(
                 ErrorResponse(
                     error = "Validation Error",
                     message = validationErrors.joinToString("; "),
-                    path = "/tickets"
+                    path = "/tickets",
                 ),
-                HttpStatus.BAD_REQUEST
+                HttpStatus.BAD_REQUEST,
             )
         }
 
@@ -55,7 +54,7 @@ class TicketController(
             val classification = classificationService.classify(ticket)
             return ResponseEntity(
                 TicketCreateWithClassificationResponse(ticket.toResponse(), classification),
-                HttpStatus.CREATED
+                HttpStatus.CREATED,
             )
         }
         return ResponseEntity(ticket.toResponse(), HttpStatus.CREATED)
@@ -66,7 +65,7 @@ class TicketController(
         @RequestParam category: TicketCategory? = null,
         @RequestParam priority: TicketPriority? = null,
         @RequestParam status: TicketStatus? = null,
-        @RequestParam(name = "customer_id") customerId: String? = null
+        @RequestParam(name = "customer_id") customerId: String? = null,
     ): ResponseEntity<TicketListResponse> {
         val tickets = ticketService.listTickets(category, priority, status, customerId)
         val response = tickets.map { it.toResponse() }
@@ -83,9 +82,9 @@ class TicketController(
                 ErrorResponse(
                     error = "Not Found",
                     message = "Ticket with id $id not found",
-                    path = "/tickets/$id"
+                    path = "/tickets/$id",
                 ),
-                HttpStatus.NOT_FOUND
+                HttpStatus.NOT_FOUND,
             )
         }
     }
@@ -93,16 +92,16 @@ class TicketController(
     @PutMapping("/{id}")
     fun updateTicket(
         @PathVariable id: String,
-        @RequestBody request: TicketUpdateRequest
+        @RequestBody request: TicketUpdateRequest,
     ): ResponseEntity<Any> {
         if (!ticketService.ticketExists(id)) {
             return ResponseEntity(
                 ErrorResponse(
                     error = "Not Found",
                     message = "Ticket with id $id not found",
-                    path = "/tickets/$id"
+                    path = "/tickets/$id",
                 ),
-                HttpStatus.NOT_FOUND
+                HttpStatus.NOT_FOUND,
             )
         }
 
@@ -119,9 +118,9 @@ class TicketController(
                 ErrorResponse(
                     error = "Not Found",
                     message = "Ticket with id $id not found",
-                    path = "/tickets/$id"
+                    path = "/tickets/$id",
                 ),
-                HttpStatus.NOT_FOUND
+                HttpStatus.NOT_FOUND,
             )
         }
     }
@@ -147,8 +146,8 @@ private fun com.ai.homework.model.Ticket.toResponse(): TicketResponse {
             com.ai.homework.dto.TicketMetadataDto(
                 source = it.source,
                 browser = it.browser,
-                deviceType = it.deviceType
+                deviceType = it.deviceType,
             )
-        }
+        },
     )
 }

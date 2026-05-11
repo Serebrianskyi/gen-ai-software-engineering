@@ -6,14 +6,13 @@ import com.ai.homework.importer.JsonTicketImporter
 import com.ai.homework.importer.XmlTicketImporter
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.InputStream
 
 @Service
 class ImportService(
     private val csvImporter: CsvTicketImporter,
     private val jsonImporter: JsonTicketImporter,
     private val xmlImporter: XmlTicketImporter,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
 ) {
 
     fun importTickets(file: MultipartFile): ImportResult {
@@ -39,9 +38,9 @@ class ImportService(
                         com.ai.homework.dto.ImportError(
                             row = 0,
                             field = "file",
-                            message = "Unsupported file format. Supported formats: CSV, JSON, XML"
-                        )
-                    )
+                            message = "Unsupported file format. Supported formats: CSV, JSON, XML",
+                        ),
+                    ),
                 )
             }
         }

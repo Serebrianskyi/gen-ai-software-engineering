@@ -16,7 +16,7 @@ data class TicketMetadataDto(
     val browser: String? = null,
 
     @JsonProperty("device_type")
-    val deviceType: DeviceType? = null
+    val deviceType: DeviceType? = null,
 )
 
 data class TicketCreateRequest(
@@ -45,7 +45,7 @@ data class TicketCreateRequest(
     val tags: List<String> = emptyList(),
 
     @JsonProperty("metadata")
-    val metadata: TicketMetadataDto? = null
+    val metadata: TicketMetadataDto? = null,
 )
 
 data class TicketUpdateRequest(
@@ -62,7 +62,7 @@ data class TicketUpdateRequest(
     val assignedTo: String? = null,
 
     @JsonProperty("tags")
-    val tags: List<String>? = null
+    val tags: List<String>? = null,
 )
 
 data class TicketResponse(
@@ -109,7 +109,7 @@ data class TicketResponse(
     val tags: List<String>,
 
     @JsonProperty("metadata")
-    val metadata: TicketMetadataDto? = null
+    val metadata: TicketMetadataDto? = null,
 )
 
 data class ImportError(
@@ -120,7 +120,7 @@ data class ImportError(
     val field: String,
 
     @JsonProperty("message")
-    val message: String
+    val message: String,
 )
 
 data class ImportResult(
@@ -134,7 +134,7 @@ data class ImportResult(
     val failed: Int,
 
     @JsonProperty("errors")
-    val errors: List<ImportError> = emptyList()
+    val errors: List<ImportError> = emptyList(),
 )
 
 data class ClassificationResult(
@@ -151,7 +151,7 @@ data class ClassificationResult(
     val keywordsFound: List<String>,
 
     @JsonProperty("reasoning")
-    val reasoning: String
+    val reasoning: String,
 )
 
 data class TicketCreateWithClassificationResponse(
@@ -159,7 +159,7 @@ data class TicketCreateWithClassificationResponse(
     val ticket: TicketResponse,
 
     @JsonProperty("classification")
-    val classification: ClassificationResult
+    val classification: ClassificationResult,
 )
 
 data class TicketListResponse(
@@ -167,7 +167,7 @@ data class TicketListResponse(
     val count: Int,
 
     @JsonProperty("tickets")
-    val tickets: List<TicketResponse>
+    val tickets: List<TicketResponse>,
 )
 
 data class ErrorResponse(
@@ -181,5 +181,5 @@ data class ErrorResponse(
     val timestamp: LocalDateTime = LocalDateTime.now(),
 
     @JsonProperty("path")
-    val path: String? = null
+    val path: String? = null,
 )

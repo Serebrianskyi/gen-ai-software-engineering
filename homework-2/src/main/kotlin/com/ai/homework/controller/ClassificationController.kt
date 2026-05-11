@@ -1,6 +1,5 @@
 package com.ai.homework.controller
 
-import com.ai.homework.dto.ClassificationResult
 import com.ai.homework.dto.ErrorResponse
 import com.ai.homework.service.ClassificationService
 import com.ai.homework.service.TicketService
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/tickets")
 class ClassificationController(
     private val classificationService: ClassificationService,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
 ) {
 
     @PostMapping("/{id}/auto-classify")
@@ -26,9 +25,9 @@ class ClassificationController(
                 ErrorResponse(
                     error = "Not Found",
                     message = "Ticket with id $id not found",
-                    path = "/tickets/$id/auto-classify"
+                    path = "/tickets/$id/auto-classify",
                 ),
-                HttpStatus.NOT_FOUND
+                HttpStatus.NOT_FOUND,
             )
         } else {
             val classificationResult = classificationService.classify(ticket)

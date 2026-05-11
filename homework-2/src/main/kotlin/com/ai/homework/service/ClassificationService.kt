@@ -13,37 +13,37 @@ class ClassificationService {
         private val CATEGORY_KEYWORDS = mapOf(
             TicketCategory.ACCOUNT_ACCESS to listOf(
                 "login", "password", "signin", "sign in", "authentication", "2fa",
-                "two-factor", "access", "verify", "account locked", "reset password"
+                "two-factor", "access", "verify", "account locked", "reset password",
             ),
             TicketCategory.TECHNICAL_ISSUE to listOf(
                 "error", "crash", "bug", "exception", "issue", "problem", "broken",
-                "not working", "fail", "failed", "failure", "timeout", "timeout"
+                "not working", "fail", "failed", "failure", "timeout", "timeout",
             ),
             TicketCategory.BILLING_QUESTION to listOf(
                 "invoice", "payment", "charge", "billing", "refund", "subscription",
-                "bill", "cost", "price", "fee", "credit", "transaction"
+                "bill", "cost", "price", "fee", "credit", "transaction",
             ),
             TicketCategory.FEATURE_REQUEST to listOf(
                 "feature", "enhancement", "improvement", "request", "suggest", "idea",
-                "would like", "can you add", "ability", "capability"
+                "would like", "can you add", "ability", "capability",
             ),
             TicketCategory.BUG_REPORT to listOf(
-                "bug", "defect", "reproduce", "steps to reproduce", "expected", "actual"
-            )
+                "bug", "defect", "reproduce", "steps to reproduce", "expected", "actual",
+            ),
         )
 
         private val PRIORITY_KEYWORDS = mapOf(
             TicketPriority.URGENT to listOf(
                 "urgent", "critical", "emergency", "asap", "as soon as possible",
                 "immediately", "production down", "can't access", "cannot access",
-                "security", "breach", "attack"
+                "security", "breach", "attack",
             ),
             TicketPriority.HIGH to listOf(
-                "important", "blocking", "urgent", "asap", "high", "high priority"
+                "important", "blocking", "urgent", "asap", "high", "high priority",
             ),
             TicketPriority.LOW to listOf(
-                "minor", "cosmetic", "nice to have", "suggestion", "low priority"
-            )
+                "minor", "cosmetic", "nice to have", "suggestion", "low priority",
+            ),
         )
     }
 
@@ -66,7 +66,7 @@ class ClassificationService {
             priority = priorityResult.first,
             confidence = confidence,
             keywordsFound = allKeywords.distinct(),
-            reasoning = generateReasoning(categoryResult.first, priorityResult.first, allKeywords)
+            reasoning = generateReasoning(categoryResult.first, priorityResult.first, allKeywords),
         )
     }
 
@@ -105,7 +105,7 @@ class ClassificationService {
     private fun generateReasoning(
         category: TicketCategory,
         priority: TicketPriority,
-        keywords: List<String>
+        keywords: List<String>,
     ): String {
         return when {
             keywords.isEmpty() -> "No matching keywords found. Classified as $category with $priority priority."

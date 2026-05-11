@@ -1,9 +1,7 @@
 package com.ai.homework.service
 
 import com.ai.homework.dto.TicketCreateRequest
-import com.ai.homework.dto.TicketResponse
 import com.ai.homework.dto.TicketUpdateRequest
-import com.ai.homework.model.DeviceType
 import com.ai.homework.model.Ticket
 import com.ai.homework.model.TicketCategory
 import com.ai.homework.model.TicketMetadata
@@ -33,9 +31,9 @@ class TicketService(private val validator: TicketValidator) {
                 TicketMetadata(
                     source = it.source,
                     browser = it.browser,
-                    deviceType = it.deviceType
+                    deviceType = it.deviceType,
                 )
-            }
+            },
         )
         tickets[ticket.id] = ticket
         return ticket
@@ -54,7 +52,7 @@ class TicketService(private val validator: TicketValidator) {
         category: TicketCategory? = null,
         priority: TicketPriority? = null,
         status: TicketStatus? = null,
-        customerId: String? = null
+        customerId: String? = null,
     ): List<Ticket> {
         return tickets.values.filter { ticket ->
             (category == null || ticket.category == category) &&
@@ -78,7 +76,7 @@ class TicketService(private val validator: TicketValidator) {
                 LocalDateTime.now()
             } else {
                 ticket.resolvedAt
-            }
+            },
         )
 
         tickets[id] = updatedTicket

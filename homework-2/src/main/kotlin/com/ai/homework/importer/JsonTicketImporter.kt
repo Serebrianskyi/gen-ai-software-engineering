@@ -19,7 +19,7 @@ import java.io.InputStream
 @Component
 class JsonTicketImporter(
     private val validator: TicketValidator,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
 ) : TicketImporter {
 
     private val objectMapper = ObjectMapper()
@@ -40,9 +40,9 @@ class JsonTicketImporter(
                         ImportError(
                             row = 0,
                             field = "file",
-                            message = "Root element must be an array"
-                        )
-                    )
+                            message = "Root element must be an array",
+                        ),
+                    ),
                 )
             }
 
@@ -56,8 +56,8 @@ class JsonTicketImporter(
                         ImportError(
                             row = recordNumber,
                             field = "record",
-                            message = "Record must be an object"
-                        )
+                            message = "Record must be an object",
+                        ),
                     )
                     continue
                 }
@@ -72,8 +72,8 @@ class JsonTicketImporter(
                             ImportError(
                                 row = recordNumber,
                                 field = errorMsg.split(":")[0],
-                                message = errorMsg
-                            )
+                                message = errorMsg,
+                            ),
                         )
                     }
                 }
@@ -83,7 +83,7 @@ class JsonTicketImporter(
                 totalRecords = recordNumber,
                 successful = tickets.size,
                 failed = errors.size,
-                errors = errors
+                errors = errors,
             )
         } catch (e: Exception) {
             return ImportResult(
@@ -94,9 +94,9 @@ class JsonTicketImporter(
                     ImportError(
                         row = 0,
                         field = "file",
-                        message = "Failed to parse JSON: ${e.message}"
-                    )
-                )
+                        message = "Failed to parse JSON: ${e.message}",
+                    ),
+                ),
             )
         }
     }
@@ -163,7 +163,7 @@ class JsonTicketImporter(
         val metadata = TicketMetadata(
             source = source,
             browser = browser,
-            deviceType = deviceType
+            deviceType = deviceType,
         )
 
         val tagsNode = node.get("tags")
@@ -182,7 +182,7 @@ class JsonTicketImporter(
             category = category,
             priority = priority,
             metadata = metadata,
-            tags = tags
+            tags = tags,
         )
 
         return ImportedTicket(ticket, emptyList())

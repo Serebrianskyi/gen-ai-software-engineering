@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 class TicketValidator {
     companion object {
         private val EMAIL_PATTERN = Pattern.compile(
-            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$",
         )
         private const val SUBJECT_MIN_LENGTH = 1
         private const val SUBJECT_MAX_LENGTH = 200

@@ -1,10 +1,10 @@
-# 🚦 Quality Gates & Acceptance Criteria
+# Quality Gates & Acceptance Criteria
 
 This document defines the quality standards, acceptance criteria, and verification steps for all homework submissions. Every submission must pass these gates before being considered complete and ready for review.
 
 ---
 
-## 🎯 Overview
+## Overview
 
 Quality gates are organized into five categories:
 1. **Build & Compilation** — Code must compile and build
@@ -147,16 +147,16 @@ Successfully generated code to .../build/generated/openapi
 // Map HTTP 201 Created to match OpenAPI spec endpoint response
 // (Spring's default is 200 OK, but spec requires 201)
 @PostMapping
-fun create(...): ResponseEntity<Transaction> { ... }
+fun create(): ResponseEntity<Transaction> { }
 ```
 
 **Bad Comments**:
 ```kotlin
 // Create a transaction
-fun create(...) { ... }
+fun create() { }
 
 // Loop through transactions
-for (t in transactions) { ... }
+for (t in transactions) { }
 ```
 
 **Why it matters**: Self-documenting code is more maintainable; comments become stale and misleading.
@@ -572,7 +572,7 @@ Quality gates map to grading rubric:
 
 ---
 
-## 🔗 Related Documents
+## 🔗 Related Documentsb
 
 - **[agents.md](./agents.md)** — Guidance for AI-assisted development
 - **[homework-1/README.md](./homework-1/README.md)** — Example of complete documentation

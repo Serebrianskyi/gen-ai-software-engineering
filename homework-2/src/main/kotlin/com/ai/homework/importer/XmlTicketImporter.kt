@@ -10,7 +10,6 @@ import com.ai.homework.model.TicketPriority
 import com.ai.homework.model.TicketSource
 import com.ai.homework.service.TicketService
 import com.ai.homework.validator.TicketValidator
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
@@ -22,7 +21,7 @@ import java.io.InputStream
 data class XmlTickets(
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "ticket")
-    val tickets: List<XmlTicket> = emptyList()
+    val tickets: List<XmlTicket> = emptyList(),
 )
 
 data class XmlTicket(
@@ -61,13 +60,13 @@ data class XmlTicket(
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "tag")
-    val tags: List<String>? = null
+    val tags: List<String>? = null,
 )
 
 @Component
 class XmlTicketImporter(
     private val validator: TicketValidator,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
 ) : TicketImporter {
 
     private val xmlMapper = XmlMapper()
@@ -92,8 +91,8 @@ class XmlTicketImporter(
                             ImportError(
                                 row = recordNumber,
                                 field = errorMsg.split(":")[0],
-                                message = errorMsg
-                            )
+                                message = errorMsg,
+                            ),
                         )
                     }
                 }
@@ -103,7 +102,7 @@ class XmlTicketImporter(
                 totalRecords = recordNumber,
                 successful = tickets.size,
                 failed = errors.size,
-                errors = errors
+                errors = errors,
             )
         } catch (e: Exception) {
             return ImportResult(
@@ -114,9 +113,9 @@ class XmlTicketImporter(
                     ImportError(
                         row = 0,
                         field = "file",
-                        message = "Failed to parse XML: ${e.message}"
-                    )
-                )
+                        message = "Failed to parse XML: ${e.message}",
+                    ),
+                ),
             )
         }
     }
@@ -171,7 +170,7 @@ class XmlTicketImporter(
         val metadata = TicketMetadata(
             source = source,
             browser = xmlTicket.browser,
-            deviceType = deviceType
+            deviceType = deviceType,
         )
 
         val ticket = Ticket(
@@ -183,7 +182,7 @@ class XmlTicketImporter(
             category = category,
             priority = priority,
             metadata = metadata,
-            tags = xmlTicket.tags ?: emptyList()
+            tags = xmlTicket.tags ?: emptyList(),
         )
 
         return ImportedTicket(ticket, emptyList())
