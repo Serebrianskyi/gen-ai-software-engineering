@@ -1,0 +1,305 @@
+[
+  {
+    "customer_id": "cust-101",
+    "customer_email": "alice@techcorp.com",
+    "customer_name": "Alice Johnson",
+    "subject": "Cannot login - account locked",
+    "description": "My account is locked after 3 failed login attempts. I know the correct password now but cannot access the account. This is blocking my work on a critical project deadline today.",
+    "category": "account_access",
+    "priority": "urgent",
+    "status": "new",
+    "tags": ["locked", "login", "urgent"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-102",
+    "customer_email": "bob@startup.io",
+    "customer_name": "Bob Chen",
+    "subject": "Payment gateway returns 500 error",
+    "description": "All payment attempts fail with HTTP 500 error since 9am UTC. Our checkout flow is completely broken. We are losing approximately $2000 per hour in sales. Need immediate escalation.",
+    "category": "technical_issue",
+    "priority": "urgent",
+    "status": "in_progress",
+    "tags": ["payment", "production", "outage"],
+    "metadata": {
+      "source": "api",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-103",
+    "customer_email": "carol@design.co",
+    "customer_name": "Carol Williams",
+    "subject": "Refund request for accidental purchase",
+    "description": "I accidentally purchased the Enterprise plan instead of Professional. I noticed within 10 minutes and immediately contacted support. Please process a refund for the price difference of $200.",
+    "category": "billing_question",
+    "priority": "medium",
+    "status": "waiting_customer",
+    "tags": ["refund", "billing"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-104",
+    "customer_email": "dave@enterprise.com",
+    "customer_name": "Dave Morrison",
+    "subject": "Feature request: multi-tenant support",
+    "description": "We need the ability to manage multiple organizations under a single admin account. This is a blocker for us onboarding our clients onto your platform. Would love to see this in the roadmap.",
+    "category": "feature_request",
+    "priority": "high",
+    "status": "new",
+    "tags": ["multi-tenant", "enterprise", "feature"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Firefox 121",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-105",
+    "customer_email": "eve@mobile.app",
+    "customer_name": "Eve Rodriguez",
+    "subject": "iOS app crashes when uploading photos",
+    "description": "The app crashes every time I try to upload a photo larger than 2MB on iPhone 15 Pro. Steps to reproduce: 1) Tap upload button 2) Select photo from library 3) App crashes immediately. Happens 100% of the time.",
+    "category": "bug_report",
+    "priority": "high",
+    "status": "new",
+    "tags": ["ios", "crash", "upload", "bug"],
+    "metadata": {
+      "source": "api",
+      "browser": "Safari 17",
+      "device_type": "mobile"
+    }
+  },
+  {
+    "customer_id": "cust-106",
+    "customer_email": "frank@analytics.com",
+    "customer_name": "Frank Liu",
+    "subject": "Dashboard data is 24 hours delayed",
+    "description": "The analytics dashboard shows data that is approximately 24 hours behind real-time. I can see new events happening in the API logs but the dashboard does not reflect them until next day.",
+    "category": "technical_issue",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["dashboard", "analytics", "delay"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-107",
+    "customer_email": "grace@nonprofit.org",
+    "customer_name": "Grace Thompson",
+    "subject": "Non-profit discount application",
+    "description": "We are a registered 501c3 non-profit organization and I understand you offer discounts for non-profits. I would like to apply for the discount and provide our non-profit status documentation.",
+    "category": "billing_question",
+    "priority": "low",
+    "status": "new",
+    "tags": ["discount", "nonprofit", "billing"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-108",
+    "customer_email": "henry@devteam.io",
+    "customer_name": "Henry Park",
+    "subject": "API documentation error in authentication section",
+    "description": "The API docs show Bearer token format as Authorization: Token {key} but the actual API expects Authorization: Bearer {key}. This inconsistency cost our team 3 hours of debugging.",
+    "category": "bug_report",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["docs", "api", "authentication", "bug"],
+    "metadata": {
+      "source": "api"
+    }
+  },
+  {
+    "customer_id": "cust-109",
+    "customer_email": "iris@ux.design",
+    "customer_name": "Iris Nakamura",
+    "subject": "Color contrast fails WCAG accessibility guidelines",
+    "description": "The light gray text on white background in the form labels fails WCAG AA contrast ratio requirements. This is an accessibility violation. Color contrast ratio is approximately 2.5:1, should be at least 4.5:1.",
+    "category": "bug_report",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["accessibility", "wcag", "contrast", "a11y"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-110",
+    "customer_email": "jack@saas.com",
+    "customer_name": "Jack Peterson",
+    "subject": "Request: SAML SSO integration",
+    "description": "Our enterprise security policy requires SAML 2.0 SSO for all third-party tools. We would like to integrate with our Azure AD identity provider. Is this on your roadmap? This is a requirement for us to expand our usage.",
+    "category": "feature_request",
+    "priority": "high",
+    "status": "new",
+    "tags": ["sso", "saml", "enterprise", "security"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-111",
+    "customer_email": "kate@fintech.io",
+    "customer_name": "Kate Alvarez",
+    "subject": "VAT invoice required for EU compliance",
+    "description": "As an EU business we are required to have VAT numbers on all invoices for tax compliance. Our invoices currently show total amounts but not the VAT breakdown. Please update invoice template.",
+    "category": "billing_question",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["vat", "invoice", "eu", "compliance"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-112",
+    "customer_email": "liam@devops.io",
+    "customer_name": "Liam Scott",
+    "subject": "Webhook delivery failures",
+    "description": "Webhooks are failing to deliver with HTTP 504 timeout errors. Our endpoint responds in under 100ms so the issue is on your side. About 40% of webhooks fail over the past 48 hours.",
+    "category": "technical_issue",
+    "priority": "high",
+    "status": "new",
+    "tags": ["webhook", "timeout", "reliability"],
+    "metadata": {
+      "source": "api"
+    }
+  },
+  {
+    "customer_id": "cust-113",
+    "customer_email": "mia@media.co",
+    "customer_name": "Mia Campbell",
+    "subject": "Video player does not work on iPad",
+    "description": "The embedded video player shows a black screen on iPad with Safari. The controls are visible but no video plays. Works fine on desktop browsers. Affects all videos in our content library.",
+    "category": "technical_issue",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["video", "ipad", "safari", "tablet"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Safari 17",
+      "device_type": "tablet"
+    }
+  },
+  {
+    "customer_id": "cust-114",
+    "customer_email": "noah@commerce.co",
+    "customer_name": "Noah Wilson",
+    "subject": "Bulk user import from CSV failing",
+    "description": "Trying to import 500 users from CSV but the import job fails after processing about 100 records. Error message says 'Internal server error'. The CSV format matches the template exactly.",
+    "category": "technical_issue",
+    "priority": "high",
+    "status": "new",
+    "tags": ["import", "csv", "bulk", "users"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-115",
+    "customer_email": "olivia@consulting.com",
+    "customer_name": "Olivia Brown",
+    "subject": "Request: custom email templates",
+    "description": "We would like to customize the transactional email templates with our brand colors, logo, and custom footer text. The current generic templates do not match our brand guidelines.",
+    "category": "feature_request",
+    "priority": "low",
+    "status": "new",
+    "tags": ["email", "branding", "customization", "feature"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Firefox 121",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-116",
+    "customer_email": "peter@gaming.io",
+    "customer_name": "Peter Nguyen",
+    "subject": "Cannot change account email address",
+    "description": "I need to change my account email from my old company email to my personal email but the settings page shows my email as grayed out and non-editable. There is no option to request an email change.",
+    "category": "account_access",
+    "priority": "medium",
+    "status": "new",
+    "tags": ["email", "account", "settings"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-117",
+    "customer_email": "quinn@legal.com",
+    "customer_name": "Quinn Adams",
+    "subject": "Data deletion request per GDPR",
+    "description": "Per my rights under GDPR Article 17 I request complete deletion of all my personal data from your systems. Please confirm deletion within 30 days and provide written confirmation.",
+    "category": "account_access",
+    "priority": "high",
+    "status": "new",
+    "tags": ["gdpr", "data-deletion", "privacy", "legal"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-118",
+    "customer_email": "rachel@retail.co",
+    "customer_name": "Rachel Kim",
+    "subject": "Wrong pricing shown for annual plan",
+    "description": "The pricing page shows annual plan at $99 per user but at checkout the price changes to $119 per user. The difference of $20 per user adds up significantly for our 50-user team.",
+    "category": "billing_question",
+    "priority": "high",
+    "status": "new",
+    "tags": ["pricing", "billing", "discrepancy"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome 120",
+      "device_type": "desktop"
+    }
+  },
+  {
+    "customer_id": "cust-119",
+    "customer_email": "sam@healthcare.org",
+    "customer_name": "Sam Patel",
+    "subject": "HIPAA Business Associate Agreement needed",
+    "description": "Our organization is subject to HIPAA compliance and we need a signed Business Associate Agreement before we can store any patient-related data in your platform. Please send the BAA template.",
+    "category": "other",
+    "priority": "high",
+    "status": "new",
+    "tags": ["hipaa", "baa", "compliance", "healthcare"],
+    "metadata": {
+      "source": "email"
+    }
+  },
+  {
+    "customer_id": "cust-120",
+    "customer_email": "tina@startup.co",
+    "customer_name": "Tina Foster",
+    "subject": "Onboarding wizard skips required fields",
+    "description": "During the onboarding wizard it is possible to skip the company name and industry fields by clicking Next without filling them in. These are supposed to be required. This affects our data quality.",
+    "category": "bug_report",
+    "priority": "low",
+    "status": "new",
+    "tags": ["onboarding", "validation", "bug"],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Safari 17",
+      "device_type": "desktop"
+    }
+  }
+]

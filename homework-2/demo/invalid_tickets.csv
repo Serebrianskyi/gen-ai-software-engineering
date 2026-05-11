@@ -1,0 +1,9 @@
+customer_id,customer_email,customer_name,subject,description,category,priority,status
+,alice@example.com,Alice,Missing customer ID,This ticket is missing the required customer_id field,technical_issue,high,new
+cust-bad-001,not-an-email,Bob Smith,Invalid email format,This ticket has an invalid email address that should fail validation,billing_question,medium,new
+cust-bad-002,valid@email.com,Carol Williams,,This ticket has an empty subject which should fail the minimum length validation,account_access,low,new
+cust-bad-003,valid@email.com,Dave Brown,Valid Subject,Too short,feature_request,high,new
+cust-bad-004,valid@email.com,Eve Davis,Valid Subject,This description is exactly valid length and should pass,INVALID_CATEGORY,high,new
+cust-bad-005,valid@email.com,Frank Miller,Valid Subject,This description is long enough to be valid for testing purposes,bug_report,INVALID_PRIORITY,new
+cust-bad-006,valid@email.com,Grace Wilson,Valid Subject,This description is long enough to be valid for testing purposes,billing_question,high,INVALID_STATUS
+cust-bad-007,,Henry Moore,Valid Subject,This description is long enough to be valid for testing purposes,technical_issue,medium,new

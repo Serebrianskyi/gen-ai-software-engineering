@@ -1,0 +1,80 @@
+[
+  {
+    "comment": "Missing customer_id",
+    "customer_email": "alice@example.com",
+    "customer_name": "Alice Johnson",
+    "subject": "Valid Subject",
+    "description": "Valid description with enough length to pass validation",
+    "category": "technical_issue",
+    "priority": "high"
+  },
+  {
+    "comment": "Invalid email format",
+    "customer_id": "cust-bad-101",
+    "customer_email": "not-a-valid-email",
+    "customer_name": "Bob Smith",
+    "subject": "Valid Subject",
+    "description": "Valid description with enough length to pass validation",
+    "category": "billing_question",
+    "priority": "medium"
+  },
+  {
+    "comment": "Subject too short (empty)",
+    "customer_id": "cust-bad-102",
+    "customer_email": "carol@example.com",
+    "customer_name": "Carol Williams",
+    "subject": "",
+    "description": "Valid description with enough length to pass validation",
+    "category": "account_access",
+    "priority": "low"
+  },
+  {
+    "comment": "Description too short",
+    "customer_id": "cust-bad-103",
+    "customer_email": "dave@example.com",
+    "customer_name": "Dave Brown",
+    "subject": "Valid Subject",
+    "description": "Short",
+    "category": "feature_request",
+    "priority": "high"
+  },
+  {
+    "comment": "Invalid category enum value",
+    "customer_id": "cust-bad-104",
+    "customer_email": "eve@example.com",
+    "customer_name": "Eve Davis",
+    "subject": "Valid Subject",
+    "description": "Valid description with enough length to pass validation",
+    "category": "INVALID_CATEGORY",
+    "priority": "high"
+  },
+  {
+    "comment": "Invalid priority enum value",
+    "customer_id": "cust-bad-105",
+    "customer_email": "frank@example.com",
+    "customer_name": "Frank Miller",
+    "subject": "Valid Subject",
+    "description": "Valid description with enough length to pass validation",
+    "category": "bug_report",
+    "priority": "INVALID_PRIORITY"
+  },
+  {
+    "comment": "Missing customer_email",
+    "customer_id": "cust-bad-106",
+    "customer_name": "Grace Wilson",
+    "subject": "Valid Subject",
+    "description": "Valid description with enough length to pass validation",
+    "category": "billing_question",
+    "priority": "medium"
+  },
+  {
+    "comment": "Subject exceeds maximum length of 200 characters",
+    "customer_id": "cust-bad-107",
+    "customer_email": "henry@example.com",
+    "customer_name": "Henry Moore",
+    "subject": "This subject line is intentionally way too long and exceeds the maximum allowed length of two hundred characters which should trigger a validation error and cause this record to fail during import processing",
+    "description": "Valid description with enough length to pass validation",
+    "category": "technical_issue",
+    "priority": "low"
+  }
+]
