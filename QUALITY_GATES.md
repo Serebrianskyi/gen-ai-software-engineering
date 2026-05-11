@@ -209,19 +209,24 @@ X tests passed
 ---
 
 ### Gate: Test Coverage for Business Logic
-**Status**: ⚠️ **STRONGLY RECOMMENDED** | 📊 **METRIC**
+**Status**: ✅ **REQUIRED** | 🚫 **BLOCKING**
 
-**Verification** (if configured):
+**Verification**:
 ```bash
-./gradlew test jacocoTestReport  # if Jacoco plugin is added
+./gradlew test jacocoTestReport
+# Report: build/reports/jacoco/test/html/index.html
 ```
 
 **Acceptance Criteria**:
-- [ ] Service layer: ≥ 80% line coverage
-- [ ] Validator layer: ≥ 90% coverage (critical for correctness)
-- [ ] Controllers: ≥ 50% coverage (integration tests preferred)
-- [ ] Generated code: excluded from coverage
-- [ ] Utility/model classes: ≥ 70% coverage
+- [ ] Overall coverage: ≥ 85% line coverage
+- [ ] Service layer: ≥ 90% (target: 97%)
+- [ ] Validator layer: ≥ 90% (critical for correctness; target: 97%)
+- [ ] Controllers: ≥ 70% (integration tests via MockMvc)
+- [ ] DTO/model classes: ≥ 80% (target: 100%)
+- [ ] Generated code: excluded from coverage reports
+- [ ] Test count scales with complexity: expect 200+ tests for a full-featured API
+
+**Baseline from HW2**: 320+ tests, 85% overall, 97% service, 100% DTOs
 
 **Why it matters**: High coverage reduces production bugs. Untested paths are likely broken.
 
@@ -266,9 +271,11 @@ Test invalid inputs to verify rejection:
 - [ ] Missing required fields are rejected
 - [ ] Out-of-range values are rejected (negative amounts, invalid IDs, etc.)
 - [ ] Invalid enum values are rejected
-- [ ] Error response includes clear error message (e.g., "Amount must be positive")
+- [ ] String length constraints enforced (min and max)
+- [ ] Email format validated
+- [ ] Error response includes field-level messages (not just "bad request")
 
-**Test Examples** (from HW1 pattern):
+**Test Examples**:
 ```bash
 # Missing required field
 curl -X POST http://localhost:8080/api/v1/transactions \
@@ -276,14 +283,63 @@ curl -X POST http://localhost:8080/api/v1/transactions \
   -d '{"fromAccount":"ACC-123"}'
 # Expected: 400 Bad Request with error details
 
-# Invalid amount
-curl -X POST http://localhost:8080/api/v1/transactions \
+# Subject too long
+curl -X POST http://localhost:8080/tickets \
   -H "Content-Type: application/json" \
-  -d '{"fromAccount":"ACC-123","toAccount":"ACC-456","amount":-100}'
-# Expected: 400 Bad Request, "Amount must be positive"
+  -d '{"subject":"'"$(head -c 201 /dev/urandom | base64 | head -c 201)"'"}'
+# Expected: 400 Bad Request, "Subject must be 1-200 characters"
 ```
 
 **Why it matters**: Validation prevents bad data from entering the system and corrupting state.
+
+---
+
+### Gate: Multi-Format Import (for import-capable projects)
+**Status**: ✅ **REQUIRED** | 🚫 **BLOCKING**
+
+**Verification**:
+```bash
+# Import CSV
+curl -X POST http://localhost:8080/tickets/import \
+  -F "file=@demo/sample_tickets.csv;type=text/csv"
+
+# Import JSON
+curl -X POST http://localhost:8080/tickets/import \
+  -F "file=@demo/sample_tickets.json;type=application/json"
+
+# Import XML
+curl -X POST http://localhost:8080/tickets/import \
+  -F "file=@demo/sample_tickets.xml;type=application/xml"
+```
+
+**Acceptance Criteria**:
+- [ ] CSV, JSON, XML all import successfully
+- [ ] Returns `ImportResult`: `{ total_records, successful, failed, errors }`
+- [ ] Invalid rows are skipped with per-row error details (row number + field + reason)
+- [ ] Valid rows are persisted — `GET /tickets` reflects imported data
+- [ ] Partial failure does not block valid rows
+- [ ] Swagger UI shows "Choose File" button (not text input) for file upload
+
+**Why it matters**: Import without persistence is a bug. Partial failure handling is a key feature.
+
+---
+
+### Gate: Thread Safety (for in-memory storage)
+**Status**: ✅ **REQUIRED** | 🚫 **BLOCKING**
+
+**Verification**:
+```bash
+# Run concurrent test class
+./gradlew test --tests "*ConcurrentTest*"
+```
+
+**Acceptance Criteria**:
+- [ ] Storage uses `ConcurrentHashMap`, not `HashMap` or `mutableMapOf()`
+- [ ] No shared mutable state outside of the service singleton
+- [ ] Concurrent read/write tests pass without data corruption
+- [ ] No `ConcurrentModificationException` under parallel requests
+
+**Why it matters**: Spring services are singletons; `HashMap` causes data corruption under concurrent requests.
 
 ---
 
@@ -345,9 +401,9 @@ curl -X POST http://localhost:8080/api/v1/transactions \
 - [ ] API working screenshot (example endpoint response)
 - [ ] Health check passing screenshot
 - [ ] Swagger UI showing all endpoints
+- [ ] File upload showing "Choose File" button (not text input) for import endpoints
 - [ ] At least one example of AI interaction (prompt + response)
-- [ ] Test results (if applicable)
-- [ ] Code snippet showing key implementation (e.g., service logic)
+- [ ] Test results and coverage report
 
 **Directory Structure**:
 ```
@@ -356,10 +412,9 @@ homework-X/docs/screenshots/
 ├── 02-swagger-ui.png
 ├── 03-api-response.png
 ├── 04-validation-error.png
-├── 05-ai-prompt.png
-├── 06-ai-response.png
-├── 07-test-results.png
-└── README.md (brief captions)
+├── 05-import-result.png        # For import-capable projects
+├── 06-test-coverage.png
+└── 07-ai-interaction.png
 ```
 
 **Why it matters**: Visual evidence is proof of working solution. Screenshots are grading criteria.
@@ -498,14 +553,18 @@ Use this checklist before opening a PR:
 
 ### Testing
 - [ ] `./gradlew test` passes (0 failures)
+- [ ] `./gradlew jacocoTestReport` — coverage ≥ 85% overall
 - [ ] Manual API tests from HOWTORUN.md all work
 - [ ] Invalid inputs are rejected gracefully
+- [ ] Import tested with all supported formats (if applicable)
 
 ### Documentation
-- [ ] README.md is complete and accurate
-- [ ] HOWTORUN.md has working instructions
+- [ ] README.md is complete and accurate (architecture diagram, endpoints table)
+- [ ] HOWTORUN.md has working instructions (curl examples, import steps)
+- [ ] PR_CHECKLIST.md maps features to tasks with challenges noted
 - [ ] Screenshots in `docs/screenshots/` exist
-- [ ] API spec (`homework-X.yaml`) is valid and complete
+- [ ] API spec (`homework-X.yaml`) valid — OR — `docs/API_REFERENCE.md` for domain-first projects
+- [ ] Sample data in `demo/` for import-capable projects (valid + invalid)
 
 ### Runtime
 - [ ] Application starts cleanly
@@ -572,13 +631,15 @@ Quality gates map to grading rubric:
 
 ---
 
-## 🔗 Related Documentsb
+## 🔗 Related Documents
 
-- **[agents.md](./agents.md)** — Guidance for AI-assisted development
-- **[homework-1/README.md](./homework-1/README.md)** — Example of complete documentation
-- **[homework-1/HOWTORUN.md](./homework-1/HOWTORUN.md)** — Example of runnable instructions
+- **[agents.md](./agents.md)** — Guidance for AI-assisted development and code patterns
+- **[homework-1/README.md](./homework-1/README.md)** — Example: OpenAPI-first documentation
+- **[homework-1/HOWTORUN.md](./homework-1/HOWTORUN.md)** — Example: runnable instructions
+- **[homework-2/PR_CHECKLIST.md](./homework-2/PR_CHECKLIST.md)** — Example: PR checklist with challenges
+- **[homework-2/docs/API_REFERENCE.md](./homework-2/docs/API_REFERENCE.md)** — Example: domain-first API docs
 
 ---
 
-**Last Updated**: May 2, 2026  
+**Last Updated**: May 11, 2026
 **Applies to**: All Homework Submissions (HW1–HW6)

@@ -9,25 +9,28 @@
 - Best when: spec is provided upfront, API contracts are critical
 
 **HW2+ Pattern (Traditional REST, Domain-First)**:
-- Define data models first (case classes, enums, validation rules)
+- Define data models first (data classes, enums, validation rules)
 - Build endpoints that serve those models
 - Create documentation AFTER implementation (describe what exists)
 - No code generation; manual DTO management
+- Swagger/OpenAPI via `springdoc-openapi` (auto-generated from annotations)
 - Best when: requirements evolve, testing/logic complexity is high, domain is the focus
 
-**Key difference**: HW1 spec-drives-code; HW2 code-drives-spec.
+**Key difference**: HW1 spec-drives-code; HW2+ code-drives-spec.
 
 ### Multi-Module Architecture
 - **Separation of concerns**: Keep API specification generation isolated from application logic
 - **Module per homework**: Each homework gets its own module (`:homework-1`, `:homework-2`, etc.)
 - **Reusable specs**: Specs in `openapi-spec/` can be shared; name files clearly (e.g., `homework-1.yaml`)
 - **Clean dependencies**: Modules depend on generated specs, not on each other
+- **Version alignment**: All modules must use the same Kotlin and Spring Boot versions (root `build.gradle.kts` is source of truth)
 
 ### Spring Boot Best Practices
 - **Framework conventions over configuration**: Use Spring's standard patterns
 - **Validation at service layer**: Business rules and complex validation belong in services
 - **Controllers are thin**: Controllers map HTTP to service calls; logic stays in services
 - **Dependency injection**: Use Spring's @Service, @Repository, @Controller for lifecycle management
+- **Thread-safe storage**: Use `ConcurrentHashMap` for in-memory state; never use `HashMap` in a Spring singleton
 
 ---
 
@@ -36,29 +39,38 @@
 ```
 ai-workshops/
 ├── agents.md                    # This file
+├── QUALITY_GATES.md             # Quality standards for all homeworks
 ├── settings.gradle.kts          # Multi-module configuration
-├── build.gradle.kts             # Root build config
-├── openapi-spec/                # API specification module
+├── build.gradle.kts             # Root build config (versions + spotless)
+├── .editorconfig                # Formatting rules for ktlint
+├── openapi-spec/                # API specification module (HW1)
 │   ├── build.gradle.kts
 │   ├── homework-1.yaml          # HW1 API spec
-│   ├── homework-2.yaml          # HW2 API spec 
-│   └── build/generated/         # Generated code (read-only)
-├── homework-1/
+│   └── build/generated/         # Generated code (read-only, git-ignored)
+├── homework-1/                  # Banking transaction API (OpenAPI-first)
 │   ├── build.gradle.kts
-│   ├── README.md               # Implementation details
-│   ├── HOWTORUN.md             # Setup & run instructions
+│   ├── README.md
+│   ├── HOWTORUN.md
 │   ├── src/main/kotlin/
 │   ├── src/main/resources/
-│   └── docs/screenshots/       # Evidence of AI usage
-├── homework-2/                  # (future)
+│   └── docs/screenshots/
+├── homework-2/                  # Customer support ticket system (domain-first)
+│   ├── build.gradle.kts
+│   ├── README.md
+│   ├── HOWTORUN.md
+│   ├── PR_CHECKLIST.md
+│   ├── demo/                    # Sample data files (CSV, JSON, XML)
+│   ├── docs/                    # API reference, architecture, diagrams
+│   └── src/
 └── ...
 ```
 
 **Key rules**:
 - Each homework gets a module in `homework-X/`
-- Shared API specs live in `openapi-spec/` with homework-specific names
+- HW1 shared API specs live in `openapi-spec/`; HW2+ embed docs in `docs/`
 - Generated code goes to `build/generated/` (git-ignored)
-- Documentation is per-module: `README.md` and `HOWTORUN.md`
+- Documentation is per-module: `README.md`, `HOWTORUN.md`, `PR_CHECKLIST.md`
+- Sample data lives in `demo/` for import-capable projects
 
 ---
 
@@ -66,12 +78,14 @@ ai-workshops/
 
 ### Gradle Configuration
 Each homework module must have a `build.gradle.kts` that:
-1. Declares plugins: `kotlin("jvm")`, `kotlin("plugin.spring")`, `id("org.springframework.boot")`, `id("io.spring.dependency-management")`, code formatter (`spotless`)
-2. Optionally includes `id("org.openapi.generator")` if generating from spec
-3. Includes dependency management and testing setup
+1. Declares plugins: `kotlin("jvm")`, `kotlin("plugin.spring")`, `id("org.springframework.boot")`, `id("io.spring.dependency-management")`
+2. Optionally includes `id("org.openapi.generator")` if generating from spec (HW1 pattern)
+3. Optionally includes `jacoco` for coverage reports
+4. Includes dependency management and testing setup
 
-### OpenAPI Code Generation
-When a homework uses OpenAPI generation:
+**Version alignment rule**: Plugin versions in submodule `build.gradle.kts` must match root `build.gradle.kts`. Mismatched Kotlin versions cause classpath conflicts.
+
+### OpenAPI Code Generation (HW1 Pattern)
 ```kotlin
 plugins {
     id("org.openapi.generator")
@@ -79,7 +93,7 @@ plugins {
 
 openApiGenerate {
     generatorName.set("kotlin-spring")
-    inputSpec.set("${projectDir}/path-to-spec.yaml")  // Spec location
+    inputSpec.set("${projectDir}/path-to-spec.yaml")
     outputDir.set("$buildDir/generated/openapi")
     apiPackage.set("com.banking.api")
     modelPackage.set("com.banking.model.generated")
@@ -87,11 +101,9 @@ openApiGenerate {
     configOptions.set(mapOf(
         "useSpringBoot3" to "true",
         "documentationProvider" to "springdoc",
-        // ... other options
     ))
 }
 
-// Ensure code generation runs before compilation
 tasks.compileKotlin {
     dependsOn("openApiGenerate")
 }
@@ -105,98 +117,154 @@ sourceSets {
 }
 ```
 
-### Code Formatting
-All modules use **ktlint** via **spotless** for consistent formatting:
+### Swagger UI Integration (HW2+ Pattern)
+Instead of OpenAPI generation, use `springdoc-openapi` for auto-generated Swagger UI:
 ```kotlin
+// build.gradle.kts
+implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+```
+Swagger UI is then available at `http://localhost:8080/swagger-ui.html` with no additional config.
+
+For file upload endpoints, add `consumes` to ensure correct file picker widget:
+```kotlin
+@PostMapping("/import", consumes = ["multipart/form-data"])
+fun importData(@RequestParam file: MultipartFile): ResponseEntity<Unit> = TODO()
+```
+
+### Code Formatting
+Spotless runs at root level targeting `src/main/**/*.kt` only (test files are exempt from wildcard import rule):
+```kotlin
+// root build.gradle.kts
 spotless {
     kotlin {
-        target("src/**/*.kt")
-        ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
+        target("homework-1/src/main/**/*.kt")
+        ktlint("0.50.0")
+    }
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        ktlint("0.50.0")
     }
 }
 ```
-The `.editorconfig` file at root defines formatting rules—**do not commit unformatted code**.
+The `.editorconfig` file at root defines formatting rules — **do not commit unformatted code**.
+
+Pre-commit hook runs `./gradlew spotlessApply` automatically before every commit.
+
+### JaCoCo Coverage Reports
+```kotlin
+// build.gradle.kts
+plugins { jacoco }
+
+tasks.test { finalizedBy(tasks.jacocoTestReport) }
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports { xml.required.set(true); html.required.set(true) }
+}
+```
 
 ---
 
 ## 💻 Code Patterns & Conventions
 
-### Package Structure
+### Package Structure (HW2 Domain-First)
 ```
-com/banking/
-├── HW1Application.kt           # Spring Boot entry point
-├── config/                     # Spring configuration
-│   └── SwaggerConfig.kt        # OpenAPI/Swagger beans
-├── controller/                 # REST endpoints (thin)
-│   └── TransactionController.kt
-├── service/                    # Business logic (thick)
-│   └── TransactionService.kt
-├── validator/                  # Input validation
-│   └── TransactionValidator.kt
-└── model/                      # Domain models & enums
-    └── Transaction.kt
+com/ai/homework/
+├── TicketsApplication.kt        # Spring Boot entry point
+├── controller/                  # REST endpoints (thin)
+│   ├── TicketController.kt
+│   ├── ImportController.kt
+│   └── ClassificationController.kt
+├── service/                     # Business logic (thick)
+│   ├── TicketService.kt
+│   ├── ImportService.kt
+│   └── ClassificationService.kt
+├── importer/                    # Format-specific parsers
+│   ├── TicketImporter.kt        # Interface
+│   ├── CsvTicketImporter.kt
+│   ├── JsonTicketImporter.kt
+│   └── XmlTicketImporter.kt
+├── validator/                   # Input validation
+│   └── TicketValidator.kt
+├── model/                       # Domain models & enums
+│   └── Ticket.kt
+└── dto/                         # Request/response shapes
+    └── TicketDtos.kt
 ```
 
 ### Controllers
 - **Minimal logic**: Map HTTP requests to service calls
-- **Parameter validation**: Use `@Valid` and `@PathVariable` with validation annotations
-- **Response mapping**: Convert service results to DTOs
-- **Error handling**: Let exceptions propagate; handle globally if needed
+- **Return `ResponseEntity<Any>`** when response type varies (success vs error)
+- **Query param filtering**: Use nullable params; Spring cannot bind lowercase enums from `@RequestParam` without a custom converter — test with string params first
+- **Optional features via query params**: `?auto_classify=true` pattern for opt-in behavior
 
-Example:
+Example (HW2 pattern with optional feature flag):
 ```kotlin
-@RestController
-@RequestMapping("/api/v1/transactions")
-class TransactionController(val service: TransactionService) {
-    @PostMapping
-    fun createTransaction(@Valid @RequestBody request: CreateTransactionRequest): Transaction {
-        return service.create(request)
+@PostMapping
+fun createTicket(
+    @RequestBody request: TicketCreateRequest,
+    @RequestParam(name = "auto_classify", defaultValue = "false") autoClassify: Boolean
+): ResponseEntity<Any> {
+    val ticket = ticketService.createTicket(request)
+    return if (autoClassify) {
+        val classification = classificationService.classify(ticket)
+        ResponseEntity(TicketCreateWithClassificationResponse(ticket.toResponse(), classification), HttpStatus.CREATED)
+    } else {
+        ResponseEntity(ticket.toResponse(), HttpStatus.CREATED)
     }
 }
 ```
 
-### Services
-- **Business logic**: All validation rules and computations live here
-- **Data management**: Services manage in-memory or database state
-- **Exception handling**: Throw meaningful exceptions; let controllers decide response codes
-- **Stateless where possible**: Prefer immutability; manage shared state carefully
+### Response Wrapper Pattern
+When adding metadata to list responses (e.g., count), wrap in a DTO:
+```kotlin
+data class TicketListResponse(
+    @JsonProperty("count") val count: Int,
+    @JsonProperty("tickets") val tickets: List<TicketResponse>
+)
+// GET /tickets returns { count: N, tickets: [...] }
+```
 
-Example:
+### Services
+- **Thread-safe storage**: Always use `ConcurrentHashMap` for in-memory singletons
+- **Expose store method for importers**: `fun storeTicket(ticket: Ticket): Ticket` allows importers to persist directly without going through request conversion
+- **Business logic**: All validation rules and computations live here
+- **Exception handling**: Return null or throw; let controllers decide response codes
+
 ```kotlin
 @Service
-class TransactionService {
-    private val transactions = mutableMapOf<String, Transaction>()
-    
-    fun create(request: CreateTransactionRequest): Transaction {
-        validate(request)  // Delegate to validator or inline
-        val transaction = Transaction(id = UUID.randomUUID().toString())
-        transactions[transaction.id] = transaction
-        return transaction
-    }
+class TicketService {
+    private val tickets = ConcurrentHashMap<String, Ticket>()
+
+    fun createTicket(request: TicketCreateRequest): Ticket { }
+    fun storeTicket(ticket: Ticket): Ticket { tickets[ticket.id] = ticket; return ticket }
+    fun getTicket(id: String): Ticket? = tickets[id]
+    fun ticketExists(id: String): Boolean = tickets.containsKey(id)
 }
 ```
 
 ### Validators
-- **Encapsulate validation**: Separate complex validation logic from services
-- **Reusable rules**: Define validators as standalone classes or functions
-- **Clear error messages**: Validation exceptions should explain what's wrong
+- **Return error list, don't throw**: Collect all errors and return; let controller format the 400 response
+- **Separate concerns**: Email format, string lengths, enum validity — each in its own check
+- **Clear error messages**: Include field name and constraint in the message
 
-Example:
 ```kotlin
-object TransactionValidator {
-    fun validate(request: CreateTransactionRequest) {
-        require(request.amount > 0) { "Amount must be positive" }
-        require(request.currency.matches(ISO_CURRENCY_PATTERN)) { "Invalid currency" }
-        // ...
+@Component
+class TicketValidator {
+    fun validate(request: TicketCreateRequest): List<String> {
+        val errors = mutableListOf<String>()
+        if (!request.customerEmail.matches(EMAIL_REGEX)) errors.add("Invalid email format")
+        if (request.subject.length !in 1..200) errors.add("Subject must be 1-200 characters")
+        if (request.description.length !in 10..2000) errors.add("Description must be 10-2000 characters")
+        return errors
     }
 }
 ```
 
 ### Models
-- **Generated DTOs**: From OpenAPI spec; do not hand-edit
-- **Domain models**: Custom Kotlin data classes for internal use
-- **Enums**: Use for fixed sets (TransactionType, TransactionStatus, etc.)
-- **Immutability**: Prefer `val` and data classes; avoid mutable state
+- **Generated DTOs** (HW1): From OpenAPI spec; do not hand-edit
+- **Domain models** (HW2+): Custom Kotlin data classes; use `val` everywhere
+- **Enums**: Use for fixed sets; name in SCREAMING_SNAKE_CASE for enum values, lowercase snake_case in JSON via `@JsonProperty`
+- **Nullable fields**: Use `?` for optional metadata; Jackson handles null serialization
 
 ### No Comments on "What"
 - Code should be self-documenting: clear names, intent visible
@@ -207,66 +275,98 @@ object TransactionValidator {
 When implementing multi-format imports (CSV, JSON, XML):
 
 **Strategy**:
-- Abstract importer interface: `interface TicketImporter { fun import(content: String): List<Ticket> }`
+- Abstract importer interface: `interface TicketImporter { fun import(content: String): ImportResult }`
 - Concrete implementations: `CsvTicketImporter`, `JsonTicketImporter`, `XmlTicketImporter`
-- Factory or switch statement to select importer based on file type
+- Each importer calls `ticketService.storeTicket()` directly — importers must be injected with `TicketService`
 - Accumulate errors; don't fail on first bad record
 
 **Error handling**:
-- Return `ImportResult` with summary: `{ total: Int, successful: Int, failed: Int, errors: List<String> }`
-- Include line/record number + reason in error messages
+- Return `ImportResult` with summary: `{ totalRecords: Int, successful: Int, failed: Int, errors: List<ImportError> }`
+- Include row number + field + reason in each `ImportError`
 - Distinguish parse errors from validation errors
-- Return HTTP 400 with details (allow client to fix and retry)
 
-**Performance**:
-- Stream large files instead of loading into memory
-- Batch validation instead of validating each record individually
-- Parallel processing if handling multiple files simultaneously
+**Jackson XML pitfalls**:
+- Make all XML-mapped fields nullable (`val tags: List<String>? = null`) — Jackson XML cannot inject non-null defaults
+- Add `@JacksonXmlElementWrapper` and `@JacksonXmlProperty` for list fields
+- Gradle 8.x + Jackson XML has compatibility issues — keep XML test coverage separate and document the limitation
+
+**CSV pitfalls**:
+- Descriptions containing commas break naive CSV parsing — use Apache Commons CSV (`commons-csv:1.10.0`)
+- Never include commas in sample data description fields
+- Validate all fields before accepting a row; partial rows (missing columns) cause index-out-of-bounds
 
 ### Classification & Rule-Based Logic (HW2 Pattern)
 When implementing automated categorization or priority assignment:
 
 **Strategy**:
-- Extract keywords from text (subject + description)
-- Match against predefined keyword lists (e.g., ["login", "password"] → account_access)
-- Return classification with confidence score (0-1) based on keyword matches
-- Allow manual overrides; log all decisions
+- Lowercase and tokenize input text (subject + description combined)
+- Match against predefined keyword maps per category and priority
+- Score: `confidence = keywords_matched / total_keywords_in_winning_category`
+- Return classification even when confidence is low; let caller decide threshold
 
 **Implementation**:
 ```kotlin
 data class ClassificationResult(
-    val category: String,
-    val priority: String,
-    val confidence: Double,  // keywords_matched / total_keywords
+    val category: TicketCategory,
+    val priority: TicketPriority,
+    val confidence: Double,          // 0.0–1.0
     val keywordsFound: List<String>,
     val reasoning: String
 )
 ```
 
+**Auto-classify on creation**: Expose as optional query param (`?auto_classify=true`) returning a combined response DTO. Don't force classification — make it opt-in.
+
 **Testing**:
-- Test each category with typical keywords
-- Test edge cases (empty text, all caps, typos)
-- Test priority levels independently
-- Verify confidence scoring is accurate
+- Test each category with its canonical keywords
+- Test priority levels independently from category
+- Test confidence scoring: 0 keywords → low confidence, all keywords → high
+- Test edge cases: empty text, all caps, mixed languages
 
 ---
 
 ## 🧪 Testing & Validation
 
-### Unit Tests
-- **Test service logic**: Service layer tests should cover business rules
-- **Mock external dependencies**: In-memory stubs for persistence, external APIs
-- **Use Spring Boot Test**: `@SpringBootTest` for integration tests if needed
-- **Test validators**: Separately test validation rules with edge cases
+### Coverage Targets (from HW2 baseline)
+| Layer | Target | HW2 Achieved |
+|-------|--------|--------------|
+| Service | ≥ 90% | 97% |
+| Validator | ≥ 90% | 97% |
+| Controllers | ≥ 70% | 89% |
+| DTOs/Models | ≥ 80% | 100% |
+| Overall | ≥ 85% | 85% |
 
-### Integration Tests
-- **Test full request/response**: Controller → Service → Response
-- **Use test containers** if needing real database/external service
-- **Keep tests isolated**: Each test should be independent
+Aim to exceed these; use JaCoCo HTML report to find uncovered paths.
+
+### Unit Tests
+- **Test service logic**: Cover happy path + every validation branch
+- **Test validators**: Every field constraint gets its own test (boundary values: min-1, min, max, max+1)
+- **Test importers**: Valid input, missing fields, invalid enums, malformed format, unicode, empty file
+- **No mocks for in-memory storage**: Test against the real in-memory store; mocks hide integration bugs
+
+### Integration Tests (MockMvc)
+- **Full controller tests**: Use `@SpringBootTest` + `@AutoConfigureMockMvc`
+- **Test all HTTP methods**: GET, POST, PUT, DELETE with success and error cases
+- **Test status codes explicitly**: `.andExpect(status().isCreated())`, `.andExpect(status().isNotFound())`
+- **Test response body structure**: Use `.andExpect(jsonPath("$.field").value(...))`
+- **No wildcard imports in test files**: ktlint enforces this; import each MockMvc method explicitly
+
+```text
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+```
+
+### Test Organization
+- One test class per source class (mirrors the source tree)
+- `@DisplayName` on class and each test for readable reports
+- Edge case tests grouped in a dedicated `*EdgeCasesTest` class
+- Keep tests isolated: each test creates its own data, doesn't rely on order
 
 ### API Verification
-- **Swagger UI**: Verify endpoints are documented and responsive
-- **Curl tests**: Include simple curl examples in `HOWTORUN.md`
+- **Swagger UI**: Verify endpoints are documented, file upload shows "Choose File" (not text input)
+- **Curl tests**: Include working examples in `HOWTORUN.md`
 - **Health checks**: Always include `/actuator/health` endpoint
 
 ---
@@ -276,26 +376,38 @@ data class ClassificationResult(
 ### Per-Homework Files
 
 #### `README.md` (Implementation Details)
-- Explain architecture and design decisions
-- Document API endpoints and their business logic
+- Explain architecture and design decisions with Mermaid diagram
+- Document all API endpoints in a table (method, path, description, status codes)
 - Show example requests/responses
-- Link to the OpenAPI spec file
-- Include dependency diagram if multi-module
+- Link to docs/ for detailed API reference and architecture docs
 
 #### `HOWTORUN.md` (Setup & Execution)
-- Prerequisites (Java version, tools)
-- Build instructions (with Gradle commands)
-- Run instructions (bootRun, JAR, etc.)
-- How to verify (Swagger UI, health check, curl examples)
-- Troubleshooting (common errors, port conflicts, etc.)
-- Project structure overview
+- Prerequisites (Java version, tools, ports)
+- Build + run instructions with exact Gradle commands
+- How to import sample data (Swagger UI steps + curl)
+- Verification steps (health check, Swagger URL, sample curl calls)
+- Troubleshooting (common errors: port conflicts, enum deserialization, XML parsing)
+- Note known limitations (e.g., enum query param deserialization quirks)
 
-#### `docs/screenshots/` (Evidence of AI Usage)
-- Prompts given to AI tools
-- Responses and suggestions received
-- Code generated or verified by AI
-- Final working application (Swagger UI, endpoints, responses)
-- Test results if applicable
+#### `PR_CHECKLIST.md` (Submission Evidence)
+- Implemented features mapped to tasks
+- Test count and coverage breakdown
+- Sample data summary
+- Challenges encountered and how resolved
+- Improvements beyond initial plan
+
+#### `docs/` (Extended Documentation)
+- `API_REFERENCE.md` — all endpoints with full cURL examples and response schemas
+- `ARCHITECTURE.md` — C4 diagrams (context, component, sequence), design decisions
+- `DIAGRAMS.md` — Mermaid diagrams for state machines, flows, data model
+- `TESTING_GUIDE.md` — test pyramid, coverage breakdown, manual checklist
+
+#### `demo/` (Sample Data)
+- `sample_tickets.csv` — valid records covering all enum values
+- `sample_tickets.json` — valid records in JSON array format
+- `sample_tickets.xml` — valid records in XML format
+- `invalid_tickets.csv` — error cases (missing fields, bad enums, length violations)
+- `invalid_tickets.json` — same error cases in JSON
 
 ---
 
@@ -305,19 +417,19 @@ data class ClassificationResult(
 When working with Claude or other AI agents:
 
 1. **Provide Context**
-    - Link to the OpenAPI spec or include the relevant schema
-    - Reference existing patterns from HW1
+    - Link to the relevant TASKS.md or spec
+    - Reference existing patterns from prior homeworks
     - Explain the business requirement clearly
 
 2. **Request Specific Implementation**
-    - "Generate a Kotlin Spring service that validates and stores transactions per [schema]"
-    - "Create a REST controller that maps to the /api/v1/accounts/{id}/balance endpoint"
-    - "Write unit tests for the TransactionValidator"
+    - "Generate a Kotlin Spring service that validates and stores tickets per [schema]"
+    - "Create a REST controller that maps to the /tickets/{id}/auto-classify endpoint"
+    - "Write unit tests for the TicketValidator covering all boundary values"
 
 3. **Ask for Verification**
-    - "Does this implementation match the OpenAPI schema?"
-    - "Are there edge cases I'm missing in validation?"
-    - "Is this following Spring best practices?"
+    - "Does this implementation match the task requirements?"
+    - "Are there edge cases I'm missing in this CSV parser?"
+    - "Is this thread-safe for concurrent requests?"
 
 4. **Iterate with Evidence**
     - Run the code and capture screenshots
@@ -325,87 +437,74 @@ When working with Claude or other AI agents:
     - Request refactoring based on actual runtime behavior
 
 ### Common Patterns to Reference
-- **OpenAPI-first**: "Follow the pattern from HW1: OpenAPI spec → generated models → service layer implementation"
-- **Validation**: "Use the validator pattern from HW1 TransactionValidator.kt"
-- **Services with state**: "Use the in-memory Map pattern from HW1 TransactionService"
-- **Controllers**: "Keep it thin—just map requests to service calls like HW1 TransactionController"
+- **OpenAPI-first (HW1)**: OpenAPI spec → generated models → service layer
+- **Domain-first (HW2+)**: Domain models → services → controllers → springdoc Swagger
+- **Validation**: Return error list from validator; controller formats 400 response
+- **Thread-safe storage**: `ConcurrentHashMap` in service singleton
+- **Import pipeline**: `TicketImporter` interface → format-specific impl → `storeTicket()`
+- **Auto-classify flag**: Optional `?auto_classify=true` query param returning combined DTO
 
 ### Token Efficiency & Concise Communication
-Agents working on this project should optimize for clarity and brevity:
-
 **When generating code**:
 - Output only the code block needed; don't repeat the entire file if editing
 - Use diffs or line ranges when modifying existing files
-- Avoid unnecessary explanatory paragraphs; let code speak for itself
 - Skip boilerplate comments on "what" the code does
 
 **When responding to user requests**:
-- Lead with the action taken (e.g., "Updated `homework-1/README.md` with..."')
-- Use bullet points for multiple items, not paragraphs
-- One sentence per update; silence is acceptable if nothing changed
-- Summarize only if the user asks for it
+- Lead with the action taken
+- Use bullet points for multiple items
+- One sentence per update
+- Summarize only if the user asks
 
 **In prompts to the user**:
-- Direct questions: "Should I also update QUALITY_GATES.md?" not "Would you like me to consider also updating QUALITY_GATES.md?"
+- Direct questions: "Should I also update QUALITY_GATES.md?" not "Would you like me to consider..."
 - Avoid filler: no "Let me..." preambles, no "As requested...", no "Thanks for asking!"
-- Status updates: "Build succeeded, app runs, health check responds" beats "The build was successful, the application started without errors, and the health check endpoint responded correctly"
-
-**Symbol & word economy**:
-- Use `code blocks` instead of descriptions where possible
-- Avoid: "In order to", "Due to the fact that", "As a result of"
-- Use: "To", "Because", "So"
-- Skip markdown where plain text works: `filename.txt` not **filename.txt**
 
 **Goal**: Maximize signal, minimize noise. Every token should add value.
 
 ### Verification Against Quality Gates
-Every homework submission must pass all gates in [QUALITY_GATES.md](./QUALITY_GATES.md) before being considered complete:
+Every homework submission must pass all gates in [QUALITY_GATES.md](./QUALITY_GATES.md):
 
-**Before final submission, verify**:
-- [ ] Build & Compilation: `./gradlew clean build` succeeds
-- [ ] Code Quality: `./gradlew spotlessCheck` passes, no hand-edited generated code
-- [ ] Testing: `./gradlew test` passes with 0 failures
-- [ ] Documentation: README.md, HOWTORUN.md, screenshots all complete
-- [ ] Deployment: App starts, health check responds, API contracts validated
+- [ ] `./gradlew clean build` succeeds
+- [ ] `./gradlew spotlessCheck` passes
+- [ ] `./gradlew test` passes with 0 failures
+- [ ] JaCoCo coverage ≥ 85% overall
+- [ ] README.md, HOWTORUN.md, screenshots all complete
+- [ ] App starts, health check responds, Swagger UI loads
+- [ ] Sample data imports successfully (if applicable)
 
-**If any gate is RED**: Fix the underlying issue, re-verify, and only then proceed to PR.
-
-Do not skip quality gates to move faster. Gates exist to prevent rework and ensure submission readiness.
+Do not skip quality gates. Gates exist to prevent rework.
 
 ### Planning Phase for New Homeworks
-When starting work on a new homework (HW2, HW3, etc.):
-
 **Step 1: Create a plan**
-- Break down the homework into discrete tasks
-- Reference the HW1 patterns and QUALITY_GATES
-- Estimate effort for each task
-- Identify dependencies (e.g., "spec must be complete before code generation")
-- Ask the user to review and approve the plan before starting implementation
+- Read TASKS.md carefully; identify all deliverables
+- Reference prior homework patterns and QUALITY_GATES
+- Break into discrete tasks with dependencies
+- Get user approval before coding
 
 **Step 2: Optimize the plan**
-- Compress overlapping tasks where possible
-- Reorder tasks to minimize context switching
-- Identify parallel work opportunities (spec + tests can run in parallel)
-- Lock in the optimized plan with user approval
+- Identify parallel work opportunities
+- Lock in the plan with user approval
 
 **Step 3: Execute in order**
-- Follow the optimized plan strictly
-- Update plan status as tasks complete
-- If blockers arise, surface them immediately rather than pivoting
+- Follow the plan strictly; surface blockers immediately
 - Verify each task against QUALITY_GATES before moving on
 
-**Example task breakdown for HW2**:
-1. Define OpenAPI spec (`openapi-spec/homework-2.yaml`)
-2. Verify spec is valid (run openApiGenerate)
-3. Implement service layer (follow HW1 TransactionService pattern)
-4. Implement controller layer (thin, delegate to service)
-5. Write unit tests (service + validator coverage ≥ 80%)
-6. Write integration tests (API contract validation)
-7. Document in README.md (architecture, endpoints, examples)
-8. Document in HOWTORUN.md (setup, run, troubleshoot)
-9. Add screenshots to `docs/screenshots/`
-10. Verify against QUALITY_GATES
-11. Prepare PR (detailed description, link to docs)
+**Example task breakdown for domain-first homework (HW2 style)**:
+1. Define domain models (data classes, enums)
+2. Implement validator (all field constraints)
+3. Implement service layer with ConcurrentHashMap storage
+4. Implement controller (CRUD endpoints)
+5. Implement importers (CSV, JSON, XML) + inject TicketService
+6. Implement classification/business logic service
+7. Add Swagger (springdoc dependency + consumes annotation for file upload)
+8. Write unit tests (service, validator, importers — edge cases)
+9. Write integration tests (MockMvc, full CRUD + error scenarios)
+10. Add JaCoCo; verify ≥ 85% coverage
+11. Create sample data files (valid + invalid for each format)
+12. Document: README, HOWTORUN, PR_CHECKLIST, docs/
+13. Verify all quality gates
+14. Prepare PR
 
 Always plan before coding. A good plan prevents rework.
 
@@ -415,30 +514,41 @@ Always plan before coding. A good plan prevents rework.
 
 Before submitting, ensure:
 
-- [ ] **API Spec**: Updated and valid OpenAPI YAML in `openapi-spec/homework-X.yaml`
-- [ ] **Code Generation**: Runs successfully; no manual edits to generated code
-- [ ] **Build**: `./gradlew build` succeeds without warnings or errors
-- [ ] **Formatting**: `spotless` passes; use `./gradlew spotlessApply` to fix
-- [ ] **Tests**: All unit and integration tests pass
-- [ ] **Running App**: Starts without errors; responds to health checks
-- [ ] **Swagger UI**: Accessible at `http://localhost:8080/swagger-ui.html` (or configured port)
-- [ ] **README.md**: Documents design, endpoints, and AI usage
-- [ ] **HOWTORUN.md**: Clear setup and run instructions with examples
-- [ ] **Screenshots**: Evidence of working app and AI-assisted development
+- [ ] **Build**: `./gradlew clean build` succeeds
+- [ ] **Formatting**: `./gradlew spotlessCheck` passes
+- [ ] **Tests**: All pass; coverage ≥ 85%
+- [ ] **Running App**: Starts without errors; health check responds
+- [ ] **Swagger UI**: Loads at `/swagger-ui.html`; file upload shows "Choose File" button
+- [ ] **README.md**: Architecture, endpoints table, design decisions, AI usage
+- [ ] **HOWTORUN.md**: Working instructions with curl examples
+- [ ] **PR_CHECKLIST.md**: Features mapped to tasks, test count, challenges
+- [ ] **Screenshots**: Working app, Swagger UI, test results in `docs/screenshots/`
+- [ ] **Sample data**: Valid + invalid files in `demo/` (if import feature exists)
 - [ ] **Pull Request**: Detailed description, links to docs, clear title
 
 ---
 
 ## 🚨 Common Pitfalls to Avoid
 
-1. **Hand-editing generated code**: Regenerate; don't patch DTOs manually
-2. **Logic in controllers**: Move to services; keep controllers thin
-3. **No validation**: Validate early in services; fail fast with clear errors
-4. **Ignoring the spec**: Always keep OpenAPI spec in sync with implementation
-5. **Skipping documentation**: Screenshots and HOWTORUN are grading criteria
-6. **Unformatted code**: Run `spotlessApply` before committing
-7. **Missing error handling**: Catch exceptions; return meaningful HTTP status codes
-8. **Stale dependencies**: Keep versions aligned across modules (see `build.gradle.kts`)
+**HW1 (OpenAPI-first)**:
+1. Hand-editing generated code — regenerate; don't patch DTOs manually
+2. Ignoring the spec — keep OpenAPI spec in sync with implementation
+
+**HW2+ (Domain-first)**:
+3. Using `HashMap` instead of `ConcurrentHashMap` — causes race conditions
+4. Importers that don't persist — inject `TicketService` and call `storeTicket()`
+5. Wildcard imports in test files — ktlint blocks commit; import each method explicitly
+6. CSV with commas in descriptions — use Apache Commons CSV and avoid commas in sample data
+7. XML fields as non-null — make all Jackson XML-mapped fields nullable
+8. Enum deserialization from `@RequestParam` — Spring needs custom converter for lowercase enums; test with string params
+9. Gradle version conflicts — all modules must use same Kotlin/Spring Boot versions as root
+
+**Universal**:
+10. Logic in controllers — move to services
+11. Missing error handling — return 400/404, not 500
+12. Skipping documentation — screenshots and HOWTORUN are grading criteria
+13. Unformatted code — run `./gradlew spotlessApply` before committing
+14. Committing build artifacts — ensure `.gradle/`, `build/` are in `.gitignore`
 
 ---
 
@@ -449,31 +559,46 @@ Before submitting, ensure:
 - Service Pattern: `homework-1/src/main/kotlin/com/banking/service/TransactionService.kt`
 - Validator Pattern: `homework-1/src/main/kotlin/com/banking/validator/TransactionValidator.kt`
 - Controller Pattern: `homework-1/src/main/kotlin/com/banking/controller/TransactionController.kt`
-- Build Config: `homework-1/build.gradle.kts`
+
+**From Homework 2:**
+- Thread-safe service: `homework-2/src/main/kotlin/com/ai/homework/service/TicketService.kt`
+- Importer interface + CSV/JSON/XML: `homework-2/src/main/kotlin/com/ai/homework/importer/`
+- Classification with confidence: `homework-2/src/main/kotlin/com/ai/homework/service/ClassificationService.kt`
+- DTO patterns + response wrappers: `homework-2/src/main/kotlin/com/ai/homework/dto/TicketDtos.kt`
+- MockMvc integration tests: `homework-2/src/test/kotlin/com/ai/homework/controller/`
+- Sample data: `homework-2/demo/`
 
 **External Resources:**
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+- [springdoc-openapi](https://springdoc.org/)
 - [OpenAPI 3.0 Specification](https://spec.openapis.org/oas/v3.0.0)
-- [OpenAPI Generator Docs](https://openapi-generator.tech/)
 - [Kotlin Language Reference](https://kotlinlang.org/docs/reference/)
+- [Apache Commons CSV](https://commons.apache.org/proper/commons-csv/)
 
 ---
 
 ## 🎯 Summary
 
-The HW1 approach is:
-1. **Define the API spec first** (OpenAPI YAML)
-2. **Generate models from the spec** (automatic, idempotent)
-3. **Implement services** (thick business logic)
-4. **Wire controllers** (thin HTTP mapping)
-5. **Validate inputs** (reusable validators)
-6. **Document thoroughly** (README, HOWTORUN, screenshots)
-7. **Format & test** (spotless, unit/integration tests)
-8. **Commit with evidence** (PR with detailed description & screenshots)
+**HW1 approach** (OpenAPI-first):
+1. Define the API spec (OpenAPI YAML)
+2. Generate models from the spec (automatic)
+3. Implement services (thick business logic)
+4. Wire controllers (thin HTTP mapping)
+5. Validate inputs, format & test, document, PR
 
-Follow this for HW2–HW6 and maintain consistency across the codebase.
+**HW2+ approach** (Domain-first):
+1. Define domain models and enums
+2. Implement validator (return error list)
+3. Implement service with `ConcurrentHashMap`
+4. Implement importers (inject service, call `storeTicket`)
+5. Add classification/business logic
+6. Add springdoc Swagger (`springdoc-openapi-starter-webmvc-ui`)
+7. Write 85%+ coverage tests (unit + MockMvc integration)
+8. Create sample data (`demo/`)
+9. Document (`docs/`, `PR_CHECKLIST.md`)
+10. Verify all quality gates, then PR
 
 ---
 
-**Last Updated**: May 2, 2026  
-**Established from**: Homework 1 Implementation
+**Last Updated**: May 11, 2026
+**Established from**: Homework 1 & Homework 2 Implementations
