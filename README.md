@@ -1,7 +1,7 @@
 # 🤖 AI-Assisted Development Course — Homework Repository
 
 
-> 💡 **Pro Tip**: Star this repository to easily find it later!
+> 💡 Student Name: [Roman Serebrianskyi] Date Submitted: [11.05] AI Tools Used: [Claude Code: Haiku, Sonnet]
 
 ---
 

@@ -1,5 +1,7 @@
 # Homework 1: Banking Transactions API
 
+> 💡 Student Name: [Roman Serebrianskyi] Date Submitted: [11.05] AI Tools Used: [Claude Code: Haiku, Sonnet]
+
 **Status**: ✅ Complete and Running  
 **Technology**: Kotlin + Spring Boot 3.2.3 | OpenAPI 3.0 | Gradle Multi-Module
 

@@ -1,5 +1,7 @@
 # Homework 2: Intelligent Customer Support Ticket Management System
 
+> 💡 Student Name: [Roman Serebrianskyi] Date Submitted: [11.05] AI Tools Used: [Claude Code: Haiku, Sonnet]
+> 
 ## Overview
 
 A comprehensive Spring Boot REST API for managing customer support tickets with multi-format import capabilities, automatic categorization, and priority assignment. The system handles ticket lifecycle management, bulk file imports (CSV/JSON/XML), and intelligent classification based on content analysis.
