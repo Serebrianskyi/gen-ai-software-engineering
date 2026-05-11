@@ -1,0 +1,400 @@
+openapi: 3.0.0
+info:
+  title: Banking Transactions API
+  version: 1.0.0
+  description: Simple REST API for banking transactions management
+  contact:
+    name: Banking API Support
+  license:
+    name: Apache 2.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+  - url: https://api.banking.local
+    description: Production Server
+
+paths:
+  /transactions:
+    post:
+      summary: Create a new transaction
+      operationId: createTransaction
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+      responses:
+        '201':
+          description: Transaction created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal server error
+
+    get:
+      summary: List all transactions with optional filters
+      operationId: getTransactions
+      tags:
+        - Transactions
+      parameters:
+        - name: accountId
+          in: query
+          description: Filter by account ID
+          required: false
+          schema:
+            type: string
+            pattern: '^ACC-[A-Z0-9]{5}$'
+        - name: type
+          in: query
+          description: Filter by transaction type
+          required: false
+          schema:
+            type: string
+            enum: [deposit, withdrawal, transfer]
+        - name: from
+          in: query
+          description: Filter by start date (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          description: Filter by end date (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          description: Pagination page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 20
+
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid filter parameters
+
+  /transactions/{id}:
+    get:
+      summary: Get a specific transaction by ID
+      operationId: getTransactionById
+      tags:
+        - Transactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        '200':
+          description: Transaction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+
+  /accounts/{accountId}/balance:
+    get:
+      summary: Get account balance
+      operationId: getAccountBalance
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: string
+            pattern: '^ACC-[A-Z0-9]{5}$'
+
+      responses:
+        '200':
+          description: Account balance information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBalance'
+        '404':
+          description: Account not found
+
+  /accounts/{accountId}/summary:
+    get:
+      summary: Get transaction summary for an account
+      operationId: getAccountSummary
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: string
+            pattern: '^ACC-[A-Z0-9]{5}$'
+
+      responses:
+        '200':
+          description: Account transaction summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSummary'
+        '404':
+          description: Account not found
+
+  /accounts/{accountId}/interest:
+    get:
+      summary: Calculate simple interest on account balance
+      operationId: calculateInterest
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: string
+            pattern: '^ACC-[A-Z0-9]{5}$'
+        - name: rate
+          in: query
+          required: true
+          description: Interest rate (e.g., 0.05 for 5%)
+          schema:
+            type: number
+            format: double
+            minimum: 0
+        - name: days
+          in: query
+          required: true
+          description: Number of days
+          schema:
+            type: integer
+            minimum: 1
+
+      responses:
+        '200':
+          description: Interest calculation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterestCalculation'
+        '400':
+          description: Invalid parameters
+        '404':
+          description: Account not found
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      required:
+        - id
+        - fromAccount
+        - toAccount
+        - amount
+        - currency
+        - type
+        - timestamp
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique transaction identifier
+        fromAccount:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+          description: Source account ID
+        toAccount:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+          description: Destination account ID
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          description: Transaction amount (positive, max 2 decimal places)
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          description: ISO 4217 currency code
+        type:
+          type: string
+          enum: [deposit, withdrawal, transfer]
+          description: Transaction type
+        timestamp:
+          type: string
+          format: date-time
+          description: Transaction timestamp in ISO 8601 format
+        status:
+          type: string
+          enum: [pending, completed, failed]
+          description: Transaction status
+        description:
+          type: string
+          nullable: true
+          description: Optional transaction description
+
+    CreateTransactionRequest:
+      type: object
+      required:
+        - fromAccount
+        - toAccount
+        - amount
+        - currency
+        - type
+      properties:
+        fromAccount:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+          description: Source account ID
+        toAccount:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+          description: Destination account ID
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          description: Transaction amount
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          description: ISO 4217 currency code
+        type:
+          type: string
+          enum: [deposit, withdrawal, transfer]
+          description: Transaction type
+        description:
+          type: string
+          nullable: true
+
+    ValidationError:
+      type: object
+      required:
+        - error
+        - details
+      properties:
+        error:
+          type: string
+          example: "Validation failed"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    AccountBalance:
+      type: object
+      required:
+        - accountId
+        - balance
+        - currency
+        - lastUpdated
+      properties:
+        accountId:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+        balance:
+          type: number
+          format: double
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+        lastUpdated:
+          type: string
+          format: date-time
+
+    AccountSummary:
+      type: object
+      required:
+        - accountId
+        - totalDeposits
+        - totalWithdrawals
+        - transactionCount
+        - lastTransactionDate
+      properties:
+        accountId:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+        totalDeposits:
+          type: number
+          format: double
+        totalWithdrawals:
+          type: number
+          format: double
+        transactionCount:
+          type: integer
+        lastTransactionDate:
+          type: string
+          format: date-time
+          nullable: true
+
+    InterestCalculation:
+      type: object
+      required:
+        - accountId
+        - principalBalance
+        - rate
+        - days
+        - calculatedInterest
+      properties:
+        accountId:
+          type: string
+          pattern: '^ACC-[A-Z0-9]{5}$'
+        principalBalance:
+          type: number
+          format: double
+        rate:
+          type: number
+          format: double
+        days:
+          type: integer
+        calculatedInterest:
+          type: number
+          format: double
+        futureValue:
+          type: number
+          format: double

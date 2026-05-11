@@ -1,0 +1,57 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "fromAccount": "ACC-12345",
+    "toAccount": "ACC-67890",
+    "amount": 100.50,
+    "currency": "USD",
+    "type": "transfer",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "status": "completed",
+    "description": "Payment for services"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "fromAccount": "ACC-12345",
+    "toAccount": "ACC-12345",
+    "amount": 500.00,
+    "currency": "USD",
+    "type": "deposit",
+    "timestamp": "2024-01-16T14:15:00Z",
+    "status": "completed",
+    "description": "Salary deposit"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "fromAccount": "ACC-67890",
+    "toAccount": "ACC-67890",
+    "amount": 50.00,
+    "currency": "EUR",
+    "type": "withdrawal",
+    "timestamp": "2024-01-17T09:45:00Z",
+    "status": "completed",
+    "description": "ATM withdrawal"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "fromAccount": "ACC-11111",
+    "toAccount": "ACC-22222",
+    "amount": 250.75,
+    "currency": "GBP",
+    "type": "transfer",
+    "timestamp": "2024-01-18T16:20:00Z",
+    "status": "pending",
+    "description": "International transfer"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "fromAccount": "ACC-33333",
+    "toAccount": "ACC-44444",
+    "amount": 1000.00,
+    "currency": "USD",
+    "type": "transfer",
+    "timestamp": "2024-01-19T11:00:00Z",
+    "status": "failed",
+    "description": "Insufficient funds"
+  }
+]

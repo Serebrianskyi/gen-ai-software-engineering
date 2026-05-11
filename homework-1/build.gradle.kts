@@ -1,24 +1,28 @@
 plugins {
-    kotlin("jvm") version "1.9.23" apply false
-    kotlin("plugin.spring") version "1.9.23" apply false
-    id("org.springframework.boot") version "3.2.1" apply false
-    id("io.spring.dependency-management") version "1.1.4"
-    id("org.springdoc.openapi-gradle-plugin") version "1.8.0"
-    id("com.diffplug.spotless") version "6.25.0"
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    id("com.diffplug.spotless")
 }
-
-// API Spec Version
-val apiSpecVersion = "0.0.1"
 
 group = "com.banking"
 version = "1.0.0"
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
+    // OpenAPI Spec (generated models)
+    implementation(project(":openapi-spec"))
+
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -40,10 +44,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += "-Xjsr305=strict"
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xjsr305=strict")
     }
 }
 
@@ -52,7 +56,7 @@ tasks.withType<Test> {
 }
 
 springBoot {
-    mainClass.set("com.banking.ApplicationKt")
+    mainClass.set("com.banking.BankingApplicationKt")
 }
 
 // Spotless code formatting
@@ -62,7 +66,7 @@ spotless {
         ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
     }
     kotlinGradle {
-        target("*.gradle.kts", "**/*.gradle.kts")
+        target("*.gradle.kts")
         ktlint("0.50.0").setEditorConfigPath(rootProject.file(".editorconfig"))
     }
 }
@@ -70,24 +74,4 @@ spotless {
 // Make build check formatting before tests
 tasks.named("check") {
     dependsOn("spotlessCheck")
-subprojects {
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "com.diffplug.spotless")
-
-    spotless {
-        kotlin {
-            target("src/main/**/*.kt")
-            ktlint("0.50.0")
-        }
-        kotlinGradle {
-            target("**/*.gradle.kts")
-            ktlint("0.50.0")
-        }
-    }
-
-    dependencyManagement {
-        imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.1")
-        }
-    }
 }
