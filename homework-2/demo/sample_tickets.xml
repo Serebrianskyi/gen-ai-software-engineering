@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tickets>
+  <ticket>
+    <customer_id>cust-201</customer_id>
+    <customer_email>alex@techfirm.com</customer_email>
+    <customer_name>Alex Morgan</customer_name>
+    <subject>Cannot reset two-factor authentication</subject>
+    <description>My phone was stolen and I cannot access my 2FA codes. I need to reset two-factor authentication to regain access to my account. I can verify my identity via email or security questions.</description>
+    <category>account_access</category>
+    <priority>urgent</priority>
+    <status>new</status>
+    <source>phone</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-202</customer_id>
+    <customer_email>beth@cloudsvc.io</customer_email>
+    <customer_name>Beth Harrison</customer_name>
+    <subject>Database connection pool exhausted</subject>
+    <description>Getting connection pool exhausted errors in production since this morning. Our application is throwing exceptions because it cannot acquire database connections. This is a production outage affecting all users.</description>
+    <category>technical_issue</category>
+    <priority>urgent</priority>
+    <status>in_progress</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-203</customer_id>
+    <customer_email>carl@media.org</customer_email>
+    <customer_name>Carl Jensen</customer_name>
+    <subject>Invoice shows old company name</subject>
+    <description>We rebranded our company 3 months ago but invoices still show our old company name. I updated the company name in settings but invoices have not been updated. Need corrected invoices for tax filing.</description>
+    <category>billing_question</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-204</customer_id>
+    <customer_email>diana@product.co</customer_email>
+    <customer_name>Diana Chang</customer_name>
+    <subject>Feature: Gantt chart view for projects</subject>
+    <description>A Gantt chart view would be incredibly helpful for visualizing project timelines and dependencies. Many of our team members have requested this feature. We currently use a separate tool just for Gantt charts.</description>
+    <category>feature_request</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome 120</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-205</customer_id>
+    <customer_email>evan@software.dev</customer_email>
+    <customer_name>Evan Brooks</customer_name>
+    <subject>Race condition in concurrent writes</subject>
+    <description>Found a race condition when multiple users edit the same record simultaneously. Last write wins without any conflict detection. Expected: optimistic locking with conflict notification. Steps: open same record in two tabs, edit both, save both.</description>
+    <category>bug_report</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-206</customer_id>
+    <customer_email>faye@ecomm.shop</customer_email>
+    <customer_name>Faye Mitchell</customer_name>
+    <subject>Checkout page freezes on mobile</subject>
+    <description>The checkout page becomes unresponsive on mobile browsers when the user tries to enter credit card details. The virtual keyboard appears and then the page freezes. Affects approximately 30% of mobile checkouts based on our analytics.</description>
+    <category>technical_issue</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome Mobile</browser>
+    <device_type>mobile</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-207</customer_id>
+    <customer_email>gary@agency.io</customer_email>
+    <customer_name>Gary Torres</customer_name>
+    <subject>Annual billing switch timing question</subject>
+    <description>If I switch from monthly to annual billing mid-cycle, will I be prorated for the remaining days on the monthly plan? I want to understand the billing implications before making the switch.</description>
+    <category>billing_question</category>
+    <priority>low</priority>
+    <status>new</status>
+    <source>chat</source>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-208</customer_id>
+    <customer_email>helen@logistics.com</customer_email>
+    <customer_name>Helen Rivera</customer_name>
+    <subject>Request: Advanced filtering with saved filters</subject>
+    <description>We need the ability to save custom filter combinations and quickly apply them. For example, we frequently filter by status=in_progress AND assigned_to=team_a. Having to set these manually each time is inefficient.</description>
+    <category>feature_request</category>
+    <priority>low</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Firefox 121</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-209</customer_id>
+    <customer_email>ivan@research.edu</customer_email>
+    <customer_name>Ivan Murphy</customer_name>
+    <subject>Data export missing last 7 days</subject>
+    <description>When exporting data for the past 30 days the last 7 days of records are missing from the export file. The data is visible in the UI but not in the export. This makes our weekly reports incomplete.</description>
+    <category>bug_report</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-210</customer_id>
+    <customer_email>julia@marketing.agency</customer_email>
+    <customer_name>Julia Cooper</customer_name>
+    <subject>SSO login not working with Google Workspace</subject>
+    <description>Single sign-on with Google Workspace stopped working yesterday. Users get a Generic error from Google after authentication. The Google admin console shows the SAML configuration is correct and unchanged.</description>
+    <category>account_access</category>
+    <priority>high</priority>
+    <status>in_progress</status>
+    <source>web_form</source>
+    <browser>Chrome 120</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-211</customer_id>
+    <customer_email>kevin@finserv.com</customer_email>
+    <customer_name>Kevin Bailey</customer_name>
+    <subject>PCI compliance documentation request</subject>
+    <description>Our security team requires PCI DSS compliance documentation and penetration test results before we can proceed with integration. Please send your PCI compliance certificate and most recent pen test report summary.</description>
+    <category>other</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-212</customer_id>
+    <customer_email>linda@hosting.net</customer_email>
+    <customer_name>Linda Sanders</customer_name>
+    <subject>Memory leak in client SDK</subject>
+    <description>The Node.js client SDK has a memory leak. Memory usage grows continuously during long-running operations and the process crashes after several hours. Using version 2.3.1. Reproducible with a simple polling script.</description>
+    <category>bug_report</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-213</customer_id>
+    <customer_email>mike@healthtech.io</customer_email>
+    <customer_name>Mike Howard</customer_name>
+    <subject>Timezone conversion incorrect for APAC</subject>
+    <description>Timestamps in the UI are shown incorrectly for users in APAC timezones. A meeting scheduled for 9am JST shows as 9am UTC for Japanese users. The timezone conversion is not being applied.</description>
+    <category>bug_report</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome 120</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-214</customer_id>
+    <customer_email>nina@retail.shop</customer_email>
+    <customer_name>Nina Price</customer_name>
+    <subject>Request: inventory forecasting module</subject>
+    <description>We would like a built-in inventory forecasting module that uses historical sales data to predict future stock requirements. This would help us avoid stockouts and overordering situations.</description>
+    <category>feature_request</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-215</customer_id>
+    <customer_email>oscar@insurance.com</customer_email>
+    <customer_name>Oscar Jenkins</customer_name>
+    <subject>Account shows wrong plan after upgrade</subject>
+    <description>I upgraded from Starter to Business plan 2 days ago. Payment was processed successfully as confirmed by bank statement, but account still shows Starter plan features and limits.</description>
+    <category>billing_question</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Safari 17</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-216</customer_id>
+    <customer_email>paula@devtools.io</customer_email>
+    <customer_name>Paula Flores</customer_name>
+    <subject>GraphQL introspection disabled in production</subject>
+    <description>GraphQL introspection is disabled in your production API but enabled in staging. This prevents us from generating types automatically in our development workflow. Please enable or provide a schema endpoint alternative.</description>
+    <category>technical_issue</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-217</customer_id>
+    <customer_email>quinn@elearning.edu</customer_email>
+    <customer_name>Quinn Reed</customer_name>
+    <subject>Request: offline mode for mobile app</subject>
+    <description>Many of our users work in areas with poor connectivity. An offline mode that syncs when connection is restored would be very valuable. Basic read access to cached data would meet most of our needs.</description>
+    <category>feature_request</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome Mobile</browser>
+    <device_type>mobile</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-218</customer_id>
+    <customer_email>rachel@legal.firm</customer_email>
+    <customer_name>Rachel Cook</customer_name>
+    <subject>Cannot download invoice PDFs</subject>
+    <description>All invoice download links return 403 Forbidden errors. I need these invoices for our quarterly financial audit. This is blocking our accounting team. The links in the email also fail.</description>
+    <category>billing_question</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-219</customer_id>
+    <customer_email>sam@devops.io</customer_email>
+    <customer_name>Sam Morgan</customer_name>
+    <subject>Terraform provider missing latest resources</subject>
+    <description>The official Terraform provider is missing support for the newest resource types added in your API v3. The provider only covers v2 resources. This prevents us from managing infrastructure as code.</description>
+    <category>technical_issue</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-220</customer_id>
+    <customer_email>tina@analytics.co</customer_email>
+    <customer_name>Tina Bell</customer_name>
+    <subject>Real-time dashboard not updating</subject>
+    <description>The real-time dashboard stopped updating live data 3 hours ago. The page shows data from this morning. Refreshing the page shows updated data briefly then it stops updating again after about 30 seconds.</description>
+    <category>technical_issue</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome 120</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-221</customer_id>
+    <customer_email>ursula@startup.io</customer_email>
+    <customer_name>Ursula Gray</customer_name>
+    <subject>Phishing email using our brand name</subject>
+    <description>We received reports from customers that they are getting phishing emails pretending to be from our company using your platform. The emails look like they originate from your sending infrastructure. Please investigate immediately.</description>
+    <category>other</category>
+    <priority>urgent</priority>
+    <status>in_progress</status>
+    <source>phone</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-222</customer_id>
+    <customer_email>victor@crm.io</customer_email>
+    <customer_name>Victor Russell</customer_name>
+    <subject>Search returns results from other accounts</subject>
+    <description>Critical: search results are showing data from other customer accounts. I can see ticket records that do not belong to our organization. This is a serious data isolation bug and potential security issue.</description>
+    <category>bug_report</category>
+    <priority>urgent</priority>
+    <status>in_progress</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-223</customer_id>
+    <customer_email>wendy@travel.co</customer_email>
+    <customer_name>Wendy Griffin</customer_name>
+    <subject>Multi-currency pricing display</subject>
+    <description>Can you add support for displaying prices in multiple currencies? Our customers are global and seeing prices only in USD is confusing for non-US customers. We would need at minimum EUR, GBP, and JPY.</description>
+    <category>feature_request</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-224</customer_id>
+    <customer_email>xavier@biotech.com</customer_email>
+    <customer_name>Xavier Hayes</customer_name>
+    <subject>API returning inconsistent date formats</subject>
+    <description>The API returns dates in inconsistent formats: some endpoints use ISO 8601 while others use Unix timestamps. This inconsistency makes client-side date parsing error-prone. Please standardize to ISO 8601 across all endpoints.</description>
+    <category>bug_report</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-225</customer_id>
+    <customer_email>yara@education.org</customer_email>
+    <customer_name>Yara Wells</customer_name>
+    <subject>Bulk delete not working for archived records</subject>
+    <description>When I select multiple archived records and click Delete the system shows a success message but the records are still there after refreshing. Individual delete works fine. Bulk delete seems to only work for active records.</description>
+    <category>bug_report</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Firefox 121</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-226</customer_id>
+    <customer_email>zoe@agency.net</customer_email>
+    <customer_name>Zoe Cole</customer_name>
+    <subject>Auto-renewal disabled without consent</subject>
+    <description>I noticed my account auto-renewal was turned off even though I never changed this setting. I discovered this after my subscription lapsed and I lost access. Please explain when and why this setting was changed.</description>
+    <category>billing_question</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-227</customer_id>
+    <customer_email>adam@startup.tech</customer_email>
+    <customer_name>Adam Fox</customer_name>
+    <subject>Request: audit log for all user actions</subject>
+    <description>For compliance purposes we need a complete audit log showing all user actions with timestamps, user IDs, and IP addresses. This is required for our SOC 2 audit. Current activity log does not capture enough detail.</description>
+    <category>feature_request</category>
+    <priority>high</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-228</customer_id>
+    <customer_email>bella@commerce.io</customer_email>
+    <customer_name>Bella Dean</customer_name>
+    <subject>Email verification link expired immediately</subject>
+    <description>When I registered my account the email verification link expired before I could click it. I clicked the link within 2 minutes of receiving the email. The error says the link is invalid. I cannot complete registration.</description>
+    <category>account_access</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>web_form</source>
+    <browser>Chrome 120</browser>
+    <device_type>desktop</device_type>
+  </ticket>
+  <ticket>
+    <customer_id>cust-229</customer_id>
+    <customer_email>chris@platform.io</customer_email>
+    <customer_name>Chris Warren</customer_name>
+    <subject>Broken image links in email notifications</subject>
+    <description>Email notifications sent by the system contain broken image links. The logo and other images show as broken image icons in all email clients we tested. This makes the emails look unprofessional to our customers.</description>
+    <category>bug_report</category>
+    <priority>low</priority>
+    <status>new</status>
+    <source>email</source>
+  </ticket>
+  <ticket>
+    <customer_id>cust-230</customer_id>
+    <customer_email>dana@enterprise.co</customer_email>
+    <customer_name>Dana Stewart</customer_name>
+    <subject>Request: IP allowlisting for API access</subject>
+    <description>For security compliance we need to restrict API access to specific IP address ranges. Please add IP allowlisting functionality to the API security settings so we can block unauthorized access attempts.</description>
+    <category>feature_request</category>
+    <priority>medium</priority>
+    <status>new</status>
+    <source>api</source>
+  </ticket>
+</tickets>

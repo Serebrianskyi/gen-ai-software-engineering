@@ -8,8 +8,7 @@ pluginManagement {
         id("org.openapi.generator") version "7.3.0"
     }
 }
-
-rootProject.name = "banking-api"
-
+rootProject.name = "ai-workshops"
 include(":openapi-spec")
 include(":homework-1")
+include("homework-2")

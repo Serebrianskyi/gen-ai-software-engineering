@@ -1,8 +1,7 @@
 # 🤖 AI-Assisted Development Course — Homework Repository
 
-Welcome to the homework repository for the **GenAI and Agentic AI for Software Engineering** training course! This repository serves as a template for submitting your homework assignments throughout the program.
 
-> 💡 **Pro Tip**: Star this repository to easily find it later!
+> 💡 Student Name: [Roman Serebrianskyi] Date Submitted: [11.05] AI Tools Used: [Claude Code: Haiku, Sonnet]
 
 ---
 

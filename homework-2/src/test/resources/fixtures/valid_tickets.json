@@ -1,0 +1,37 @@
+[
+  {
+    "customer_id": "cust-001",
+    "customer_email": "john@example.com",
+    "customer_name": "John Doe",
+    "subject": "Login Issue",
+    "description": "Cannot login to my account after password reset attempt",
+    "category": "account_access",
+    "priority": "high",
+    "source": "web_form",
+    "browser": "Chrome",
+    "device_type": "desktop",
+    "tags": ["urgent", "account"]
+  },
+  {
+    "customer_id": "cust-002",
+    "customer_email": "jane@example.com",
+    "customer_name": "Jane Smith",
+    "subject": "App Crashes on Upload",
+    "description": "Application crashes when attempting to upload files larger than 100MB",
+    "category": "bug_report",
+    "priority": "urgent",
+    "source": "api",
+    "tags": ["crash", "upload"]
+  },
+  {
+    "customer_id": "cust-003",
+    "customer_email": "bob@example.com",
+    "customer_name": "Bob Johnson",
+    "subject": "Double Charge Issue",
+    "description": "I was charged twice for my monthly subscription last billing cycle",
+    "category": "billing_question",
+    "priority": "high",
+    "source": "email",
+    "tags": ["billing", "duplicate"]
+  }
+]
