@@ -43,6 +43,12 @@ htmlcov/
 *.war
 *.ear
 
+# Gradle
+.gradle/
+.gradletasknamecache
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
 # Temporary files
 tmp/
 temp/
