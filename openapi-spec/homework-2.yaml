@@ -1,0 +1,414 @@
+openapi: 3.0.0
+info:
+  title: Customer Support Ticket Management API
+  version: 2.0.0
+  description: Multi-format ticket import, auto-classification, and management system
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /tickets:
+    post:
+      summary: Create a new support ticket
+      tags:
+        - Tickets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketCreateRequest'
+      responses:
+        '201':
+          description: Ticket created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      summary: List all tickets with optional filtering
+      tags:
+        - Tickets
+      parameters:
+        - name: category
+          in: query
+          schema:
+            $ref: '#/components/schemas/TicketCategory'
+        - name: priority
+          in: query
+          schema:
+            $ref: '#/components/schemas/TicketPriority'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/TicketStatus'
+        - name: customer_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TicketResponse'
+
+  /tickets/{id}:
+    get:
+      summary: Get a specific ticket by ID
+      tags:
+        - Tickets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Ticket found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update a ticket
+      tags:
+        - Tickets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketUpdateRequest'
+      responses:
+        '200':
+          description: Ticket updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete a ticket
+      tags:
+        - Tickets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Ticket deleted successfully
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tickets/import:
+    post:
+      summary: Bulk import tickets from CSV/JSON/XML
+      tags:
+        - Import
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CSV, JSON, or XML file
+      responses:
+        '200':
+          description: Import completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResult'
+        '400':
+          description: Invalid file format or content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tickets/{id}/auto-classify:
+    post:
+      summary: Auto-classify a ticket
+      tags:
+        - Classification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Classification completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassificationResult'
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /actuator/health:
+    get:
+      summary: Health check endpoint
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy
+
+components:
+  schemas:
+    TicketCategory:
+      type: string
+      enum:
+        - account_access
+        - technical_issue
+        - billing_question
+        - feature_request
+        - bug_report
+        - other
+
+    TicketPriority:
+      type: string
+      enum:
+        - urgent
+        - high
+        - medium
+        - low
+
+    TicketStatus:
+      type: string
+      enum:
+        - new
+        - in_progress
+        - waiting_customer
+        - resolved
+        - closed
+
+    TicketSource:
+      type: string
+      enum:
+        - web_form
+        - email
+        - api
+        - chat
+        - phone
+
+    DeviceType:
+      type: string
+      enum:
+        - desktop
+        - mobile
+        - tablet
+
+    TicketMetadata:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/TicketSource'
+        browser:
+          type: string
+        device_type:
+          $ref: '#/components/schemas/DeviceType'
+
+    TicketCreateRequest:
+      type: object
+      required:
+        - customer_id
+        - customer_email
+        - customer_name
+        - subject
+        - description
+      properties:
+        customer_id:
+          type: string
+        customer_email:
+          type: string
+          format: email
+        customer_name:
+          type: string
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          minLength: 10
+          maxLength: 2000
+        category:
+          $ref: '#/components/schemas/TicketCategory'
+        priority:
+          $ref: '#/components/schemas/TicketPriority'
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          $ref: '#/components/schemas/TicketMetadata'
+
+    TicketUpdateRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/TicketStatus'
+        category:
+          $ref: '#/components/schemas/TicketCategory'
+        priority:
+          $ref: '#/components/schemas/TicketPriority'
+        assigned_to:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+    TicketResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer_id:
+          type: string
+        customer_email:
+          type: string
+          format: email
+        customer_name:
+          type: string
+        subject:
+          type: string
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/TicketCategory'
+        priority:
+          $ref: '#/components/schemas/TicketPriority'
+        status:
+          $ref: '#/components/schemas/TicketStatus'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+          nullable: true
+        assigned_to:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          $ref: '#/components/schemas/TicketMetadata'
+
+    ImportError:
+      type: object
+      properties:
+        row:
+          type: integer
+        field:
+          type: string
+        message:
+          type: string
+
+    ImportResult:
+      type: object
+      properties:
+        total_records:
+          type: integer
+        successful:
+          type: integer
+        failed:
+          type: integer
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportError'
+
+    ClassificationResult:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/TicketCategory'
+        priority:
+          $ref: '#/components/schemas/TicketPriority'
+        confidence:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+        keywords_found:
+          type: array
+          items:
+            type: string
+        reasoning:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        path:
+          type: string

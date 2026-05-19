@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tickets>
+  <ticket>
+    <customer_id>cust-001</customer_id>
+    <customer_email>john@example.com</customer_email>
+    <customer_name>John Doe</customer_name>
+    <subject>Cannot Access Account</subject>
+    <description>Unable to login to my account after password reset. Getting authentication error.</description>
+    <category>account_access</category>
+    <priority>high</priority>
+    <source>web_form</source>
+    <browser>Chrome</browser>
+    <device_type>desktop</device_type>
+    <tag>urgent</tag>
+    <tag>account</tag>
+  </ticket>
+  <ticket>
+    <customer_id>cust-002</customer_id>
+    <customer_email>jane@example.com</customer_email>
+    <customer_name>Jane Smith</customer_name>
+    <subject>Application Crashes During Upload</subject>
+    <description>The application crashes whenever I try to upload files larger than 100 megabytes</description>
+    <category>bug_report</category>
+    <priority>urgent</priority>
+    <source>api</source>
+    <tag>crash</tag>
+    <tag>upload</tag>
+  </ticket>
+  <ticket>
+    <customer_id>cust-003</customer_id>
+    <customer_email>bob@example.com</customer_email>
+    <customer_name>Bob Johnson</customer_name>
+    <subject>Billing Issue - Double Charge</subject>
+    <description>I notice I was charged twice for my subscription in the last billing cycle</description>
+    <category>billing_question</category>
+    <priority>high</priority>
+    <source>email</source>
+    <tag>billing</tag>
+  </ticket>
+</tickets>

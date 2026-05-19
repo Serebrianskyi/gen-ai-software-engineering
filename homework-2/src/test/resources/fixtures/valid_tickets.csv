@@ -1,0 +1,6 @@
+customer_id,customer_email,customer_name,subject,description,category,priority,source,browser,device_type,tags
+cust-001,john@example.com,John Doe,Login Issue,Cannot login to my account after password reset,account_access,high,web_form,Chrome,desktop,urgent,account
+cust-002,jane@example.com,Jane Smith,Bug Report,Application crashes when uploading large files,bug_report,urgent,api,,desktop,crash,upload
+cust-003,bob@example.com,Bob Johnson,Billing Question,Why was I charged twice last month?,billing_question,high,email,,mobile,billing
+cust-004,alice@example.com,Alice Williams,Feature Request,Please add dark mode to the application,feature_request,low,chat,Firefox,tablet,enhancement
+cust-005,charlie@example.com,Charlie Brown,Technical Issue,Getting timeout errors on slow connections,technical_issue,medium,web_form,Safari,mobile,timeout
