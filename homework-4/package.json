@@ -1,0 +1,19 @@
+{
+  "name": "hw4-agent-pipeline",
+  "version": "1.0.0",
+  "description": "4-agent Claude Code pipeline: Bug Research Verifier → Bug Fixer → Security Verifier + Unit Test Generator",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "jest tests/ --verbose",
+    "pipeline": "node pipeline.js",
+    "reset": "node reset.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
