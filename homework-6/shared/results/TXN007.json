@@ -1,7 +1,7 @@
 {
-    "message_id": "a4c6fb15-c3c1-4812-a28c-65535bf72810",
-    "timestamp": "2026-06-23T15:44:52.328874Z",
-    "source_agent": "transaction_validator",
+    "message_id": "acac8914-c20a-42bb-ad74-7491d8e31223",
+    "timestamp": "2026-06-23T16:44:07.795555Z",
+    "source_agent": "andromeda",
     "target_agent": "results",
     "data": {
         "transaction_id": "TXN007",
@@ -17,6 +17,6 @@
             "country": "GB"
         },
         "status": "rejected",
-        "rejection_reason": "Amount must be a valid positive number greater than zero; received -100.00"
+        "rejection_reason": "Amount must be a valid positive number greater than zero, but provided amount is -100.00"
     }
 }

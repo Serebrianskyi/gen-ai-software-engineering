@@ -1,7 +1,7 @@
 {
-    "message_id": "18d5c39e-8929-4590-b245-59f3afe847a3",
-    "timestamp": "2026-06-23T15:44:41.564515Z",
-    "source_agent": "transaction_validator",
+    "message_id": "eaaee6ec-2dd8-482a-b429-541f032d1a71",
+    "timestamp": "2026-06-23T16:44:11.771607Z",
+    "source_agent": "andromeda",
     "target_agent": "results",
     "data": {
         "transaction_id": "TXN006",
@@ -17,6 +17,6 @@
             "country": "US"
         },
         "status": "rejected",
-        "rejection_reason": "Currency 'XYZ' is not in the approved ISO 4217 list (USD, EUR, GBP, JPY, CHF, CAD, AUD, SGD, HKD, NOK, SEK, DKK)"
+        "rejection_reason": "Currency 'XYZ' is not in the approved ISO 4217 code list (USD, EUR, GBP, JPY, CHF, CAD, AUD, SGD, HKD, NOK, SEK, DKK)"
     }
 }

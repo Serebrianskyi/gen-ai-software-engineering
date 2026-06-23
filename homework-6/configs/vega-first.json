@@ -1,0 +1,16 @@
+{
+  "agents": {
+    "andromeda": {"host": "localhost", "port": 8081},
+    "sirius":    {"host": "localhost", "port": 8082},
+    "vega":      {"host": "localhost", "port": 8083},
+    "polaris":   {"host": "localhost", "port": 8084}
+  },
+  "pipeline": ["vega", "andromeda", "sirius", "polaris"],
+  "prerequisites": {
+    "andromeda": [],
+    "sirius":    ["andromeda"],
+    "vega":      ["andromeda", "sirius"],
+    "polaris":   ["andromeda", "sirius"]
+  },
+  "max_hops": 20
+}

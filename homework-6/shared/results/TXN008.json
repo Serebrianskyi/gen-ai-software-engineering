@@ -1,7 +1,7 @@
 {
-    "message_id": "35810a7b-0613-40d9-a048-f410a8bbc8f7",
-    "timestamp": "2026-06-23T15:46:26.691157Z",
-    "source_agent": "settlement_processor",
+    "message_id": "08684466-008f-4d8f-9b10-8a9637675651",
+    "timestamp": "2026-06-23T16:44:27.912529Z",
+    "source_agent": "polaris",
     "target_agent": "results",
     "data": {
         "transaction_id": "TXN008",
@@ -19,7 +19,7 @@
         "status": "settled",
         "risk_score": 0.0,
         "risk_rules": [],
-        "fraud_analysis": "I ran all four rules: high-value check (3200 < 10k ✓ pass), structuring check (not in 9k-10k range ✓ pass), off-hours check (10:15 UTC is normal hours ✓ pass), cross-border check (US to US ✓ pass). No triggers. Verdict: clean.",
-        "settled_at": "2026-06-23T15:46:26.690843Z"
+        "fraud_analysis": "I ran all four risk rules on this $3,200 transfer at 10:15 UTC: amount is well below structuring thresholds, hour 10 is standard business, and the transaction is domestic US-to-US. No triggers—this one's clean.",
+        "settled_at": "2026-06-23T16:44:27.912243Z"
     }
 }

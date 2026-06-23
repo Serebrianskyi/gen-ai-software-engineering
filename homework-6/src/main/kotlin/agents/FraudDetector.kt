@@ -1,6 +1,7 @@
 package agents
 
 import AgentMessage
+import RuleEngine
 import kotlinx.serialization.json.*
 import java.time.Instant
 import java.util.UUID
@@ -9,14 +10,13 @@ import java.util.logging.Logger
 private val log = Logger.getLogger("fraud_detector")
 
 // SIRIUS — the sky's brightest eye: nothing suspicious escapes its light
-private const val E = ""
-private const val SIRIUS = "${E}[1;33m[SIRIUS]${E}[0m"
-private const val GREEN  = "${E}[32m"
-private const val YELLOW = "${E}[33m"
-private const val RED    = "${E}[31m"
-private const val RESET  = "${E}[0m"
+private const val E      = ""
+private const val SIRIUS = "$E[1;33m[SIRIUS]$E[0m"
+private const val GREEN  = "$E[32m"
+private const val RED    = "$E[31m"
+private const val RESET  = "$E[0m"
 
-private val SYSTEM_PROMPT = """
+internal var siriusSystemPrompt: String = """
 You are SIRIUS, the sharpest fraud detection eye in the sky. You speak in first person.
 
 Assess this transaction's risk score applying ALL of these rules exactly:
@@ -37,6 +37,10 @@ Return ONLY a JSON object — no explanation, no markdown:
 }
 """.trimIndent()
 
+fun configureSirius(re: RuleEngine) {
+    siriusSystemPrompt = re.fraudSystemPrompt()
+}
+
 private fun audit(txnId: String, outcome: String, extra: Map<String, String> = emptyMap()) {
     val record = buildString {
         append("""{"timestamp":"${Instant.now()}","agent":"fraud_detector","transaction_id":"$txnId","outcome":"$outcome"""")
@@ -47,30 +51,30 @@ private fun audit(txnId: String, outcome: String, extra: Map<String, String> = e
 }
 
 private fun makeMessage(targetAgent: String, data: JsonObject): AgentMessage = AgentMessage(
-    messageId = UUID.randomUUID().toString(),
-    timestamp = Instant.now().toString(),
+    messageId   = UUID.randomUUID().toString(),
+    timestamp   = Instant.now().toString(),
     sourceAgent = "fraud_detector",
     targetAgent = targetAgent,
-    data = data,
+    data        = data,
 )
 
 fun scoreTransaction(data: JsonObject): Pair<Double, List<String>> {
-    val decision = ClaudeClient.askJson(SYSTEM_PROMPT, data.toString())
-    val score = decision["risk_score"]?.jsonPrimitive?.double ?: 0.0
-    val rules = decision["risk_rules"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
+    val decision = ClaudeClient.askJson(siriusSystemPrompt, data.toString())
+    val score    = decision["risk_score"]?.jsonPrimitive?.double ?: 0.0
+    val rules    = decision["risk_rules"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
     return score to rules
 }
 
 fun processFraudTransaction(message: JsonObject): AgentMessage {
-    val data = (message["data"]?.jsonObject ?: message).toMutableMap()
+    val data  = (message["data"]?.jsonObject ?: message).toMutableMap()
     val txnId = data["transaction_id"]?.jsonPrimitive?.content ?: "UNKNOWN"
 
     println("  $SIRIUS $txnId is mine now. Running my ruleset...")
 
-    val decision = ClaudeClient.askJson(SYSTEM_PROMPT, JsonObject(data).toString())
-    val score = decision["risk_score"]?.jsonPrimitive?.double ?: 0.0
-    val rules = decision["risk_rules"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
-    val voice = decision["voice"]?.jsonPrimitive?.content ?: ""
+    val decision = ClaudeClient.askJson(siriusSystemPrompt, JsonObject(data).toString())
+    val score    = decision["risk_score"]?.jsonPrimitive?.double ?: 0.0
+    val rules    = decision["risk_rules"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
+    val voice    = decision["voice"]?.jsonPrimitive?.content ?: ""
 
     val out = buildJsonObject {
         data.forEach { (k, v) -> put(k, v) }
@@ -88,7 +92,7 @@ fun processFraudTransaction(message: JsonObject): AgentMessage {
         makeMessage("results", out)
     } else {
         if (voice.isNotEmpty()) println("  $SIRIUS \"$voice\"")
-        println("  $SIRIUS ${GREEN}✓ $txnId clear$RESET — risk ${"%.1f".format(score)}, passing to POLARIS")
+        println("  $SIRIUS ${GREEN}✓ $txnId clear$RESET — risk ${"%.1f".format(score)}, passing forward")
         audit(txnId, "fraud_cleared", mapOf("risk_score" to score.toString()))
         makeMessage("settlement_processor", out)
     }

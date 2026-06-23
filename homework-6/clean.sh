@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
-# Removes all pipeline-generated JSON files from shared/ subdirectories.
-# Run before ./gradlew run to start with a completely clean state.
+# Removes all pipeline-generated JSON files from shared/results/.
+# Run before ./run.sh to start with a clean state.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SHARED="$SCRIPT_DIR/shared"
+RESULTS="$SCRIPT_DIR/shared/results"
 
-dirs=(input processing output results)
-total=0
-
-for dir in "${dirs[@]}"; do
-    path="$SHARED/$dir"
-    if [ -d "$path" ]; then
-        count=$(find "$path" -maxdepth 1 -name "*.json" | wc -l | tr -d ' ')
-        if [ "$count" -gt 0 ]; then
-            rm -f "$path"/*.json
-            echo "  cleared $count file(s) from shared/$dir/"
-        else
-            echo "  shared/$dir/ already empty"
-        fi
-        total=$((total + count))
+if [ -d "$RESULTS" ]; then
+    count=$(find "$RESULTS" -maxdepth 1 -name "*.json" | wc -l | tr -d ' ')
+    if [ "$count" -gt 0 ]; then
+        rm -f "$RESULTS"/*.json
+        echo "  cleared $count file(s) from shared/results/"
+    else
+        echo "  shared/results/ already empty"
     fi
-done
+else
+    mkdir -p "$RESULTS"
+    echo "  created shared/results/"
+fi
 
 echo ""
-echo "Done — $total file(s) removed."
+echo "Done."

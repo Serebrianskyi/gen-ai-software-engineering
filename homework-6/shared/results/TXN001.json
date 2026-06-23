@@ -1,7 +1,7 @@
 {
-    "message_id": "c5b22768-dd93-4905-add5-e5263740f529",
-    "timestamp": "2026-06-23T15:46:26.688086Z",
-    "source_agent": "settlement_processor",
+    "message_id": "14beb8fb-111f-40b1-b536-72d7687a9fc8",
+    "timestamp": "2026-06-23T16:44:21.424484Z",
+    "source_agent": "polaris",
     "target_agent": "results",
     "data": {
         "transaction_id": "TXN001",
@@ -19,7 +19,7 @@
         "status": "settled",
         "risk_score": 0.0,
         "risk_rules": [],
-        "fraud_analysis": "I ran all four fraud detection rules against this transaction: high-value threshold, structuring detection, off-hours activity, and cross-border check. None triggered—the amount is modest ($1500), the hour is normal business hours (09:00 UTC), and the transaction is domestic (US). I clear this one.",
-        "settled_at": "2026-06-23T15:46:26.687583Z"
+        "fraud_analysis": "I scanned all detection rules: amount check (cleared at $1,500), structuring zone (not applicable), off-hours (transaction at 09:00 UTC is normal), and cross-border (US→US is domestic). No rules triggered, verdict is fraud_cleared.",
+        "settled_at": "2026-06-23T16:44:21.424092Z"
     }
 }

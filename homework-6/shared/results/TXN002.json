@@ -1,7 +1,7 @@
 {
-    "message_id": "127c62b7-a5b8-41de-a6df-f8f262817508",
-    "timestamp": "2026-06-23T15:45:18.461246Z",
-    "source_agent": "fraud_detector",
+    "message_id": "ed05f288-2681-488a-8a5d-2c1efcbd64a9",
+    "timestamp": "2026-06-23T16:44:29.561418Z",
+    "source_agent": "vega",
     "target_agent": "results",
     "data": {
         "transaction_id": "TXN002",
@@ -21,6 +21,9 @@
         "risk_rules": [
             "high_value"
         ],
-        "fraud_analysis": "I scanned all four risk rules against this transaction: amount exceeds $10,000, triggering the high_value flag at +0.4 points. No structuring pattern, normal business hours (09:00 UTC), and domestic US routing—but the large wire transfer amount alone pushes this to my flagging threshold, so I'm flagging it for review."
+        "fraud_analysis": "I scanned all rules: the $25,000 amount triggered high_value (+0.4), while UTC hour 09:15 and US country cleared the off_hours and cross_border checks. My verdict: flagged at the threshold.",
+        "compliance_report": "A $25,000 USD wire transfer flagged due to high-value threshold breach. The transaction cleared off-hours and cross-border risk checks but remains flagged for the amount alone, warranting compliance verification of the equipment purchase claim and fund source legitimacy.",
+        "risk_summary": "high_value, wire_transfer_amount_threshold",
+        "recommended_action": "hold_for_review"
     }
 }
