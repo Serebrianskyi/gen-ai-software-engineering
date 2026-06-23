@@ -12,7 +12,7 @@ import kotlin.io.path.readText
 private val log = Logger.getLogger("settlement_processor")
 
 // POLARIS — the fixed point: cleared transactions always find their way here
-private const val E = ""
+private const val E = ""
 private const val POLARIS = "${E}[1;32m[POLARIS]${E}[0m"
 private const val GREEN   = "${E}[32m"
 private const val RESET   = "${E}[0m"
@@ -37,7 +37,8 @@ fun settleTransaction(message: JsonObject): AgentMessage {
     val amount = data["amount"]?.jsonPrimitive?.content ?: "?"
     val currency = data["currency"]?.jsonPrimitive?.content ?: "?"
 
-    println("  $POLARIS Booking $txnId — $amount $currency...")
+    println("  $POLARIS $txnId reached me — cleared by both ANDROMEDA and SIRIUS.")
+    println("  $POLARIS \"Both validators signed off on this one. I'm booking $amount $currency now. The ledger doesn't lie.\"")
 
     val out = buildJsonObject {
         data.forEach { (k, v) -> put(k, v) }
@@ -45,7 +46,7 @@ fun settleTransaction(message: JsonObject): AgentMessage {
         put("settled_at", Instant.now().toString())
     }
 
-    println("  $POLARIS ${GREEN}✓ $txnId SETTLED$RESET — funds transferred, ledger updated")
+    println("  $POLARIS ${GREEN}✓ $txnId SETTLED$RESET — done.")
     audit(txnId, "settled")
     return makeMessage("results", out)
 }

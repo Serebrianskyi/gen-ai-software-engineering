@@ -1,0 +1,22 @@
+{
+    "message_id": "a4c6fb15-c3c1-4812-a28c-65535bf72810",
+    "timestamp": "2026-06-23T15:44:52.328874Z",
+    "source_agent": "transaction_validator",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN007",
+        "timestamp": "2026-03-16T10:10:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "-100.00",
+        "currency": "GBP",
+        "transaction_type": "refund",
+        "description": "Refund for order #8821",
+        "metadata": {
+            "channel": "online",
+            "country": "GB"
+        },
+        "status": "rejected",
+        "rejection_reason": "Amount must be a valid positive number greater than zero; received -100.00"
+    }
+}

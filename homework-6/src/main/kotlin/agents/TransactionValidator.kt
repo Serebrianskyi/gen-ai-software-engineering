@@ -16,7 +16,7 @@ private const val RED       = "${E}[31m"
 private const val RESET     = "${E}[0m"
 
 private val SYSTEM_PROMPT = """
-You are a strict banking transaction validator.
+You are ANDROMEDA, a galaxy-scale compliance system at a bank. You speak in first person.
 
 Check the transaction and apply ALL of the following rules:
 1. All required fields must be present: transaction_id, timestamp, source_account,
@@ -26,8 +26,8 @@ Check the transaction and apply ALL of the following rules:
    USD, EUR, GBP, JPY, CHF, CAD, AUD, SGD, HKD, NOK, SEK, DKK
 
 Return ONLY a JSON object — no explanation, no markdown:
-  If valid:   {"status": "validated"}
-  If invalid: {"status": "rejected", "rejection_reason": "<specific reason>"}
+  If valid:   {"status": "validated", "voice": "<1-2 sentences in first person: what you checked and why it passed>"}
+  If invalid: {"status": "rejected", "rejection_reason": "<specific reason>", "voice": "<1-2 sentences in first person: what rule it broke and why you are rejecting it>"}
 """.trimIndent()
 
 private val JSON = Json { ignoreUnknownKeys = true }
@@ -55,10 +55,11 @@ fun processTransaction(message: JsonObject): AgentMessage {
     val raw: JsonObject = message["data"]?.jsonObject ?: message
     val txnId = raw["transaction_id"]?.jsonPrimitive?.content ?: "UNKNOWN"
 
-    println("  $ANDROMEDA Receiving $txnId — scanning all fields...")
+    println("  $ANDROMEDA $txnId just landed on my desk...")
 
     val decision = ClaudeClient.askJson(SYSTEM_PROMPT, raw.toString())
     val status = decision["status"]?.jsonPrimitive?.content ?: "rejected"
+    val voice = decision["voice"]?.jsonPrimitive?.content ?: ""
 
     val out = buildJsonObject {
         raw.forEach { (k, v) ->
@@ -77,12 +78,13 @@ fun processTransaction(message: JsonObject): AgentMessage {
 
     return if (status == "rejected") {
         val reason = out["rejection_reason"]?.jsonPrimitive?.content ?: ""
-        println("  $ANDROMEDA ${RED}✗ $txnId REJECTED$RESET — $reason")
+        if (voice.isNotEmpty()) println("  $ANDROMEDA \"$voice\"")
+        println("  $ANDROMEDA ${RED}✗ $txnId REJECTED$RESET")
         audit(txnId, "rejected", mapOf("reason" to reason))
         makeMessage("results", out)
     } else {
-        val currency = raw["currency"]?.jsonPrimitive?.content ?: "?"
-        println("  $ANDROMEDA ${GREEN}✓ $txnId VALIDATED$RESET — fields complete, $currency approved")
+        if (voice.isNotEmpty()) println("  $ANDROMEDA \"$voice\"")
+        println("  $ANDROMEDA ${GREEN}✓ $txnId VALIDATED$RESET — passing to SIRIUS")
         audit(txnId, "validated")
         makeMessage("fraud_detector", out)
     }

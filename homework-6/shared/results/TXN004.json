@@ -1,0 +1,27 @@
+{
+    "message_id": "08f0a2a8-db81-4d40-9a8b-1af5d889df7a",
+    "timestamp": "2026-06-23T15:45:48.127596Z",
+    "source_agent": "fraud_detector",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN004",
+        "timestamp": "2026-03-16T02:47:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "500.00",
+        "currency": "EUR",
+        "transaction_type": "transfer",
+        "description": "Invoice #4471",
+        "metadata": {
+            "channel": "api",
+            "country": "DE"
+        },
+        "status": "flagged",
+        "risk_score": 0.5,
+        "risk_rules": [
+            "off_hours",
+            "cross_border"
+        ],
+        "fraud_analysis": "I ran all four detection rules and caught off-hours activity at 02:47 UTC plus a cross-border transfer to Germany, totaling 0.5 points. This exceeds my 0.4 threshold—flagged."
+    }
+}

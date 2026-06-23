@@ -1,0 +1,27 @@
+{
+    "message_id": "d319ce87-2535-4851-a1f7-b038cfcdcf14",
+    "timestamp": "2026-06-23T15:46:26.689740Z",
+    "source_agent": "settlement_processor",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN003",
+        "timestamp": "2026-03-16T09:30:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "9999.99",
+        "currency": "USD",
+        "transaction_type": "transfer",
+        "description": "Consulting payment",
+        "metadata": {
+            "channel": "online",
+            "country": "US"
+        },
+        "status": "settled",
+        "risk_score": 0.3,
+        "risk_rules": [
+            "structuring"
+        ],
+        "fraud_analysis": "I ran all four rules on this transaction: the $9,999.99 amount triggered the structuring rule as a suspicious just-below-threshold structuring attempt, while the daytime UTC hour and domestic US channel cleared the off-hours and cross-border concerns—net risk score 0.3, below my 0.4 flagging threshold, so this clears as legitimate activity.",
+        "settled_at": "2026-06-23T15:46:26.689419Z"
+    }
+}
