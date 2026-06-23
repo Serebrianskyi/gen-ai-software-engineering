@@ -1,0 +1,26 @@
+{
+    "message_id": "979b23da-abf8-40e6-9712-26c999f29a65",
+    "timestamp": "2026-06-23T16:55:16.032132Z",
+    "source_agent": "polaris",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN005",
+        "timestamp": "2026-03-16T10:00:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "75000.00",
+        "currency": "USD",
+        "transaction_type": "wire_transfer",
+        "description": "Property settlement",
+        "metadata": {
+            "channel": "branch",
+            "country": "US"
+        },
+        "status": "flagged",
+        "risk_score": 0.4,
+        "risk_rules": [
+            "high_value"
+        ],
+        "fraud_analysis": "I scanned this wire transfer against all five fraud detection rules. The $75,000 amount triggered the high-value threshold (+0.4 points), pushing the score to exactly 0.4. The UTC timestamp of 10:00 AM is normal business hours, the destination is US-based, and the amount doesn't match structuring patterns. I flag it."
+    }
+}
