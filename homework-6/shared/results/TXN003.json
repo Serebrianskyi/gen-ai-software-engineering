@@ -1,0 +1,27 @@
+{
+    "message_id": "e54d8f55-1cc8-486e-b9a2-1fbba766295c",
+    "timestamp": "2026-06-23T16:44:19.920270Z",
+    "source_agent": "polaris",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN003",
+        "timestamp": "2026-03-16T09:30:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "9999.99",
+        "currency": "USD",
+        "transaction_type": "transfer",
+        "description": "Consulting payment",
+        "metadata": {
+            "channel": "online",
+            "country": "US"
+        },
+        "status": "settled",
+        "risk_score": 0.3,
+        "risk_rules": [
+            "structuring"
+        ],
+        "fraud_analysis": "I scanned all four risk rules: high-value transfers, structuring (9k-10k amounts), off-hours transactions, and cross-border activity. Only structuring triggered due to the $9,999.99 amount, but with a score of 0.3 below my 0.4 flagging threshold, I clear this transfer.",
+        "settled_at": "2026-06-23T16:44:19.919749Z"
+    }
+}

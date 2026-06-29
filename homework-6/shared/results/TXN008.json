@@ -1,0 +1,25 @@
+{
+    "message_id": "08684466-008f-4d8f-9b10-8a9637675651",
+    "timestamp": "2026-06-23T16:44:27.912529Z",
+    "source_agent": "polaris",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN008",
+        "timestamp": "2026-03-16T10:15:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "3200.00",
+        "currency": "USD",
+        "transaction_type": "transfer",
+        "description": "Salary advance",
+        "metadata": {
+            "channel": "mobile",
+            "country": "US"
+        },
+        "status": "settled",
+        "risk_score": 0.0,
+        "risk_rules": [],
+        "fraud_analysis": "I ran all four risk rules on this $3,200 transfer at 10:15 UTC: amount is well below structuring thresholds, hour 10 is standard business, and the transaction is domestic US-to-US. No triggers—this one's clean.",
+        "settled_at": "2026-06-23T16:44:27.912243Z"
+    }
+}

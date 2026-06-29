@@ -34,6 +34,64 @@
 
 ---
 
+## 🏦 Homework 6 — Multi-Agent Banking Pipeline (Python)
+
+### Architecture
+File-based message passing through `shared/` subdirectories. No agent reads another agent's internal state directly.
+
+```
+sample-transactions.json
+        │
+   integrator.py (orchestrator)
+        │
+        ▼
+[Transaction Validator] ──reject──► shared/results/ (status: rejected)
+        │ valid
+        ▼
+  shared/output/
+        │
+        ▼
+[Fraud Detector] ──flag──► shared/results/ (status: flagged)
+        │ clean
+        ▼
+  shared/output/
+        │
+        ▼
+[Settlement Processor] ──► shared/results/ (status: settled)
+                       └──► pipeline_summary.json
+```
+
+### Agent responsibilities
+| Agent | File | Key function |
+|-------|------|--------------|
+| Transaction Validator | `agents/transaction_validator.py` | `process_transaction(message)` |
+| Fraud Detector | `agents/fraud_detector.py` | `score_transaction(data) → (score, rules)` |
+| Settlement Processor | `agents/settlement_processor.py` | `settle_transaction(message)` |
+| MCP Server | `mcp/server.py` | `get_transaction_status`, `list_pipeline_results` |
+
+### Fraud scoring rules
+- Amount > $10,000 → +0.4
+- Hour (UTC) in 22–23 or 0–5 → +0.3
+- Cross-border (country ≠ US) → +0.2
+- Structured amount $9,000–$9,999.99 → +0.3
+- Score ≥ 0.4 → flagged
+
+### Non-negotiable constraints
+- `decimal.Decimal` for all monetary values — never `float`
+- ISO 4217 currency validation — reject unknown codes
+- Account numbers masked as `ACC-****` in all log output
+- Every inter-agent message must include `message_id`, `timestamp`, `source_agent`, `target_agent`, `message_type`, `data`
+
+### Coverage gate
+`pytest --cov=agents --cov-fail-under=80` — configured as a pre-push hook in `.claude/settings.json`. Target ≥ 90%.
+
+### Skills
+- `/run-pipeline` → `.claude/commands/run-pipeline.md`
+- `/validate-transactions` → `.claude/commands/validate-transactions.md`
+- `/write-spec` → `.claude/commands/write-spec.md`
+
+---
+
 ## 🏗️ Project Structure
 
 ```

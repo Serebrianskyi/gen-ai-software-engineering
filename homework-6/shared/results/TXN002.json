@@ -1,0 +1,29 @@
+{
+    "message_id": "ed05f288-2681-488a-8a5d-2c1efcbd64a9",
+    "timestamp": "2026-06-23T16:44:29.561418Z",
+    "source_agent": "vega",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN002",
+        "timestamp": "2026-03-16T09:15:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "25000.00",
+        "currency": "USD",
+        "transaction_type": "wire_transfer",
+        "description": "Equipment purchase",
+        "metadata": {
+            "channel": "branch",
+            "country": "US"
+        },
+        "status": "flagged",
+        "risk_score": 0.4,
+        "risk_rules": [
+            "high_value"
+        ],
+        "fraud_analysis": "I scanned all rules: the $25,000 amount triggered high_value (+0.4), while UTC hour 09:15 and US country cleared the off_hours and cross_border checks. My verdict: flagged at the threshold.",
+        "compliance_report": "A $25,000 USD wire transfer flagged due to high-value threshold breach. The transaction cleared off-hours and cross-border risk checks but remains flagged for the amount alone, warranting compliance verification of the equipment purchase claim and fund source legitimacy.",
+        "risk_summary": "high_value, wire_transfer_amount_threshold",
+        "recommended_action": "hold_for_review"
+    }
+}

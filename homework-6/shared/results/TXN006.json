@@ -1,0 +1,22 @@
+{
+    "message_id": "eaaee6ec-2dd8-482a-b429-541f032d1a71",
+    "timestamp": "2026-06-23T16:44:11.771607Z",
+    "source_agent": "andromeda",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN006",
+        "timestamp": "2026-03-16T10:05:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "200.00",
+        "currency": "XYZ",
+        "transaction_type": "transfer",
+        "description": "Test payment",
+        "metadata": {
+            "channel": "online",
+            "country": "US"
+        },
+        "status": "rejected",
+        "rejection_reason": "Currency 'XYZ' is not in the approved ISO 4217 code list (USD, EUR, GBP, JPY, CHF, CAD, AUD, SGD, HKD, NOK, SEK, DKK)"
+    }
+}

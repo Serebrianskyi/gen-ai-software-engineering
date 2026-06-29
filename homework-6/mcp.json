@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "pipeline-status": {
+      "command": "java",
+      "args": [
+        "-cp",
+        "build/libs/homework-6-kotlin-1.0.0.jar",
+        "mcp.PipelineServerKt"
+      ]
+    }
+  }
+}

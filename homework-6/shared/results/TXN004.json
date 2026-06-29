@@ -1,0 +1,30 @@
+{
+    "message_id": "e66597a9-d138-477e-86cf-9e334fa3202c",
+    "timestamp": "2026-06-23T16:44:36.907853Z",
+    "source_agent": "vega",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN004",
+        "timestamp": "2026-03-16T02:47:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "500.00",
+        "currency": "EUR",
+        "transaction_type": "transfer",
+        "description": "Invoice #4471",
+        "metadata": {
+            "channel": "api",
+            "country": "DE"
+        },
+        "status": "flagged",
+        "risk_score": 0.5,
+        "risk_rules": [
+            "off_hours",
+            "cross_border"
+        ],
+        "fraud_analysis": "I've run all four detection rules on this €500 transaction. The 02:47 UTC timestamp triggered off_hours (+0.3), and the destination country DE triggered cross_border (+0.2) since it's not US. Total score: 0.5, above my 0.4 threshold—flagged for review.",
+        "compliance_report": "A €500 transfer to Germany was executed at 02:47 UTC, triggering both off-hours and cross-border risk rules with a combined score of 0.5, exceeding the 0.4 compliance threshold. The transaction originates via API channel and references Invoice #4471, warranting verification that the off-hours timing and international destination align with the customer's expected behavior and stated invoice purpose.",
+        "risk_summary": "off_hours activity at 02:47 UTC, cross_border transfer to non-US destination (Germany), api channel transfer, combined risk score 0.5",
+        "recommended_action": "hold_for_review"
+    }
+}

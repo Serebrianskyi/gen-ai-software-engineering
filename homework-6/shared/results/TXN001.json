@@ -1,0 +1,25 @@
+{
+    "message_id": "14beb8fb-111f-40b1-b536-72d7687a9fc8",
+    "timestamp": "2026-06-23T16:44:21.424484Z",
+    "source_agent": "polaris",
+    "target_agent": "results",
+    "data": {
+        "transaction_id": "TXN001",
+        "timestamp": "2026-03-16T09:00:00Z",
+        "source_account": "ACC-****",
+        "destination_account": "ACC-****",
+        "amount": "1500.00",
+        "currency": "USD",
+        "transaction_type": "transfer",
+        "description": "Monthly rent payment",
+        "metadata": {
+            "channel": "online",
+            "country": "US"
+        },
+        "status": "settled",
+        "risk_score": 0.0,
+        "risk_rules": [],
+        "fraud_analysis": "I scanned all detection rules: amount check (cleared at $1,500), structuring zone (not applicable), off-hours (transaction at 09:00 UTC is normal), and cross-border (US→US is domestic). No rules triggered, verdict is fraud_cleared.",
+        "settled_at": "2026-06-23T16:44:21.424092Z"
+    }
+}
